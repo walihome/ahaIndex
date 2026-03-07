@@ -90,7 +90,7 @@ const MOCK_DATA: ProcessedItem[] = [
 ];
 
 export default function App() {
-  const [items, setItems] = useState<ProcessedItem[]>(MOCK_DATA);
+  const [items, setItems] = useState<ProcessedItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<ProcessedItem | null>(null);
 
@@ -156,14 +156,23 @@ export default function App() {
           <div className="section-label">今日精选 · Today's Picks</div>
           
           <div className="article-list">
-            {items.map((item, index) => (
-              <BriefingCard 
-                key={item.item_id ? `${item.item_id}-${index}` : index} 
-                item={item} 
-                index={index} 
-                onClick={setSelectedItem}
-              />
-            ))}
+            {loading ? (
+              <div className="loading-state">
+                <div className="loading-spinner"></div>
+                <span>正在加载今日精选...</span>
+              </div>
+            ) : items.length > 0 ? (
+              items.map((item, index) => (
+                <BriefingCard 
+                  key={item.item_id ? `${item.item_id}-${index}` : index} 
+                  item={item} 
+                  index={index} 
+                  onClick={setSelectedItem}
+                />
+              ))
+            ) : (
+              <div className="loading-state">今日暂无更新</div>
+            )}
           </div>
         </main>
 
