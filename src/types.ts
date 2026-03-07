@@ -19,6 +19,7 @@ export interface ProcessedItem {
   updated_at: string | null;
   original_url: string | null;
   source_name: string | null;
+  category?: string | null;
   display_metrics: DisplayMetrics | null;
   snapshot_date: string | null;
   // Dynamic fields for async hydration

@@ -31,7 +31,7 @@ export function Sidebar() {
 
         <div className="version-info">
           <span>Version 1.2.0</span>
-          <span style={{ textAlign: 'right' }}>© 2026 Index</span>
+          <span style={{ textAlign: 'right' }}>© {new Date().getFullYear()} Index</span>
         </div>
       </div>
     </aside>

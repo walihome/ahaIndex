@@ -22,12 +22,13 @@ const MOCK_DATA: ProcessedItem[] = [
     aha_index: 0.85,
     updated_at: new Date().toISOString(),
     source_name: 'GitHub Search',
+    category: '人工智能',
     display_metrics: {
       items: [
         { label: '⭐ Stars', value: '6,034' }
       ]
     },
-    snapshot_date: new Date().toISOString().split('T')[0]
+    snapshot_date: new Date().toLocaleDateString('en-CA') // YYYY-MM-DD
   },
   {
     item_id: '2',
@@ -41,13 +42,14 @@ const MOCK_DATA: ProcessedItem[] = [
     aha_index: 0.92,
     updated_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
     source_name: 'hacker news',
+    category: '人工智能',
     display_metrics: {
       items: [
         { label: '💬 Comments', value: '128' },
         { label: '⬆️ Points', value: '452' }
       ]
     },
-    snapshot_date: new Date().toISOString().split('T')[0]
+    snapshot_date: new Date().toLocaleDateString('en-CA')
   },
   {
     item_id: '3',
@@ -61,12 +63,13 @@ const MOCK_DATA: ProcessedItem[] = [
     aha_index: 0.78,
     updated_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     source_name: 'GitHub Search',
+    category: '开发者',
     display_metrics: {
       items: [
         { label: '⭐ Stars', value: '12,450' }
       ]
     },
-    snapshot_date: new Date().toISOString().split('T')[0]
+    snapshot_date: new Date().toLocaleDateString('en-CA')
   },
   {
     item_id: '4',
@@ -80,12 +83,13 @@ const MOCK_DATA: ProcessedItem[] = [
     aha_index: 0.88,
     updated_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
     source_name: 'Google Blog',
+    category: '人工智能',
     display_metrics: {
       items: [
         { label: '📅 Date', value: '2024-06-27' }
       ]
     },
-    snapshot_date: new Date().toISOString().split('T')[0]
+    snapshot_date: new Date().toLocaleDateString('en-CA')
   }
 ];
 
@@ -93,11 +97,16 @@ export default function App() {
   const [items, setItems] = useState<ProcessedItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<ProcessedItem | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState('全部');
 
   useEffect(() => {
     async function fetchItems() {
       try {
-        const today = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const today = now.getFullYear() + '-' + 
+                      String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                      String(now.getDate()).padStart(2, '0');
+        
         const { data, error } = await supabase
           .from('processed_items')
           .select('*')
@@ -145,11 +154,21 @@ export default function App() {
     hydrateData();
   }, [loading]);
 
+  const categories = ['全部', ...Array.from(new Set(items.map(item => item.category).filter(Boolean) as string[]))];
+  
+  const filteredItems = selectedCategory === '全部' 
+    ? items 
+    : items.filter(item => item.category === selectedCategory);
+
   return (
     <>
       <Masthead />
       <Ticker />
-      <NavBar />
+      <NavBar 
+        categories={categories} 
+        selectedCategory={selectedCategory} 
+        onSelectCategory={setSelectedCategory} 
+      />
 
       <div className="layout">
         <main className="main-col">
@@ -161,8 +180,8 @@ export default function App() {
                 <div className="loading-spinner"></div>
                 <span>正在加载今日精选...</span>
               </div>
-            ) : items.length > 0 ? (
-              items.map((item, index) => (
+            ) : filteredItems.length > 0 ? (
+              filteredItems.map((item, index) => (
                 <BriefingCard 
                   key={item.item_id ? `${item.item_id}-${index}` : index} 
                   item={item} 

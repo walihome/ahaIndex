@@ -1,4 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --font-playfair: "Playfair Display", serif;
+}
 
 :root {
   --ink: #1a1714;
@@ -172,10 +177,13 @@ body::before {
   cursor: pointer;
   display: flex;
   align-items: center;
+  border: none;
+  background: none;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
   transition: all 0.2s ease;
   text-decoration: none;
+  font-family: inherit;
 }
 
 .nav-tab:first-child {

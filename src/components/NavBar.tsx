@@ -1,17 +1,32 @@
 import React from 'react';
 
-export function NavBar() {
+interface NavBarProps {
+  categories: string[];
+  selectedCategory: string;
+  onSelectCategory: (category: string) => void;
+}
+
+export function NavBar({ categories, selectedCategory, onSelectCategory }: NavBarProps) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const weekDay = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][now.getDay()];
+
   return (
     <nav className="nav-bar">
       <div className="nav-inner">
         <div className="nav-tabs">
-          <a className="nav-tab active" href="#">全部</a>
-          <a className="nav-tab" href="#">人工智能</a>
-          <a className="nav-tab" href="#">开发者</a>
-          <a className="nav-tab" href="#">文化创意</a>
-          <a className="nav-tab" href="#">金融</a>
+          {categories.map(category => (
+            <button 
+              key={category}
+              className={`nav-tab ${selectedCategory === category ? 'active' : ''}`}
+              onClick={() => onSelectCategory(category)}
+            >
+              {category}
+            </button>
+          ))}
         </div>
-        <div className="nav-date">VOL. 2026.03 &nbsp;·&nbsp; 星期五</div>
+        <div className="nav-date">VOL. {year}.{month} &nbsp;·&nbsp; {weekDay}</div>
       </div>
     </nav>
   );

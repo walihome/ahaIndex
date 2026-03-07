@@ -1,6 +1,11 @@
 import React from 'react';
 
 export function Masthead() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const day = now.getDate().toString().padStart(2, '0');
+
   return (
     <header className="masthead">
       <div className="masthead-inner">
@@ -11,7 +16,9 @@ export function Masthead() {
               <circle cx="24" cy="8" r="2" fill="#c8432a"/>
             </svg>
           </div>
-          <span className="logo-text">aha指数</span>
+          <span className="logo-text">
+            <span className="text-[var(--accent)] font-playfair italic mr-0.5">aha</span>指数
+          </span>
         </div>
 
         <div className="masthead-title">
@@ -20,8 +27,8 @@ export function Masthead() {
         </div>
 
         <div className="masthead-meta">
-          VOL. 3<br/>
-          2026.03.06
+          VOL. {now.getMonth() + 1}<br/>
+          {year}.{month}.{day}
         </div>
       </div>
     </header>

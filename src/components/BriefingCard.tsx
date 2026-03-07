@@ -26,7 +26,9 @@ export function BriefingCard({ item, index, onClick }: BriefingCardProps) {
         </div>
         <span className="article-num">NO. {numStr}</span>
         <div className="featured-accent"></div>
-        <h2 className="article-title">{title}</h2>
+        <h2 className="article-title">
+          {title}
+        </h2>
         <p className="article-desc">{description}</p>
         <div className="article-meta">
           <div className="flex items-center gap-2 flex-wrap">
@@ -58,7 +60,9 @@ export function BriefingCard({ item, index, onClick }: BriefingCardProps) {
     <article className="article" style={{ position: 'relative' }} onClick={() => onClick(item)}>
       <div className="article-num">{numStr}</div>
       <div className="article-body">
-        <h2 className="article-title">{title}</h2>
+        <h2 className="article-title">
+          {title}
+        </h2>
         <p className="article-desc">{description}</p>
         <div className="article-meta">
           <div className="flex items-center gap-2 flex-wrap">
