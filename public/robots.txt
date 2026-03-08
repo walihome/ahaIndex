@@ -1,0 +1,7 @@
+# 暂时屏蔽
+User-agent: *
+Disallow: /
+
+# 内容ready后改成
+User-agent: *
+Disallow:
