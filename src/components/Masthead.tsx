@@ -16,8 +16,9 @@ export function Masthead() {
               <circle cx="24" cy="8" r="2" fill="#c8432a"/>
             </svg>
           </div>
-          <span className="logo-text">
-            <span className="text-[var(--accent)] font-playfair italic mr-0.5">aha</span>指数
+          <span className="logo-text font-mono font-bold tracking-tighter text-[24px]">
+            <span className="text-[var(--accent)]">aha</span>
+            <span className="text-[var(--ink)] ml-4">INDEX</span>
           </span>
         </div>
 
