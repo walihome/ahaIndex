@@ -1,0 +1,3 @@
+# 暂时屏蔽
+User-agent: *
+Disallow: /
