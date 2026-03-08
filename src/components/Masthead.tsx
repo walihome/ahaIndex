@@ -10,27 +10,15 @@ export function Masthead() {
     <header className="masthead">
       <div className="masthead-inner">
         <div className="masthead-logo">
-          <div className="flex items-center gap-3">
-            {/* Original Logo Mark */}
-            <div className="logo-mark">
-              <svg viewBox="0 0 32 32" fill="none">
-                <polyline points="4,24 12,10 18,18 24,8" stroke="#1a1714" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="24" cy="8" r="2" fill="#c8432a"/>
-              </svg>
-            </div>
-            
-            <div className="flex items-baseline">
-              {/* Sparkle Icon from design image */}
-              <div className="text-[var(--muted)] opacity-30 mr-2 self-center">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10L12 0Z" />
-                </svg>
-              </div>
-              <span className="font-playfair italic font-bold text-[32px] text-[var(--ink)] tracking-tight">aha</span>
-              <span className="font-noto font-[200] text-[32px] text-[var(--ink)] ml-1">指数</span>
-              {/* Red Dot from design image */}
-              <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] ml-1.5 mb-1.5"></div>
-            </div>
+          <div className="logo">
+            <svg className="logo-icon" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polyline points="1,17 8,7 14,12 20,3 25,6"
+                        stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <circle cx="25" cy="6" r="2.6" fill="var(--accent)"/>
+            </svg>
+            <span className="logo-aha">aha</span>
+            <span className="logo-zh">指数</span>
+            <div className="logo-dot"></div>
           </div>
         </div>
 
