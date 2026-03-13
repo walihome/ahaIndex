@@ -12,8 +12,8 @@ export function BriefingCard({ item, index, onClick }: BriefingCardProps) {
   const numStr = String(index + 1).padStart(3, '0');
   
   // Format date relative or simple
-  const dateStr = item.updated_at ? new Date(item.updated_at).toLocaleDateString() : '未知时间';
-  const title = item.processed_title || item.raw_title || '无标题';
+  const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString() : '未知时间';
+  const title = item.processed_title || '无标题';
   const description = item.summary || '无摘要';
   const category = item.tags && item.tags.length > 0 ? item.tags[0] : '综合';
   const tags = item.tags ? item.tags.slice(1) : [];

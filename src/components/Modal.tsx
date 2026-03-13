@@ -9,13 +9,13 @@ interface ModalProps {
 
 export function Modal({ item, onClose }: ModalProps) {
   // Format date
-  const dateStr = item.updated_at ? new Date(item.updated_at).toLocaleDateString('zh-CN', {
+  const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit'
   }).replace(/\//g, ' / ') : '未知时间';
 
-  const title = item.processed_title || item.raw_title || '无标题';
+  const title = item.processed_title || '无标题';
   const description = item.summary || '无摘要';
   const category = item.tags && item.tags.length > 0 ? item.tags[0] : '综合';
   const tags = item.tags ? item.tags.slice(1) : [];

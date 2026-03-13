@@ -8,20 +8,25 @@ export interface DisplayMetrics {
 }
 
 export interface ProcessedItem {
-  item_id: string;
+  id: string;
+  processed_item_id: string;
+  snapshot_date: string;
+  source_name: string;
+  content_type: string;
+  original_url: string;
+  author: string | null;
   processed_title: string | null;
-  raw_title: string | null;
   summary: string | null;
+  category: string | null;
   tags: string[] | null;
   keywords: string[] | null;
-  aha_index: number | null;
+  aha_index: number;
   expert_insight: string | null;
-  updated_at: string | null;
-  original_url: string | null;
-  source_name: string | null;
-  category?: string | null;
   display_metrics: DisplayMetrics | null;
-  snapshot_date: string | null;
+  raw_metrics: any | null;
+  rank: number;
+  model: string | null;
+  created_at: string | null;
   // Dynamic fields for async hydration
   views?: number;
   likes?: number;

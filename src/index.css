@@ -154,7 +154,7 @@ body::before {
 
 .ticker-track {
   display: flex;
-  animation: ticker-scroll 30s linear infinite;
+  animation: ticker-scroll 60s linear infinite;
   white-space: nowrap;
 }
 
