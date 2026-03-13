@@ -1,6 +1,7 @@
 import React from 'react';
 import Markdown from 'react-markdown';
 import { ProcessedItem } from '../types';
+import { useTracking } from '../hooks/useTracking';
 
 interface ModalProps {
   item: ProcessedItem;
@@ -8,6 +9,8 @@ interface ModalProps {
 }
 
 export function Modal({ item, onClose }: ModalProps) {
+  const { trackEvent } = useTracking();
+
   // Format date
   const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString('zh-CN', {
     year: 'numeric',
@@ -20,6 +23,14 @@ export function Modal({ item, onClose }: ModalProps) {
   const category = item.tags && item.tags.length > 0 ? item.tags[0] : '综合';
   const tags = item.tags ? item.tags.slice(1) : [];
   const score = item.aha_index !== null ? (item.aha_index * 100).toFixed(1) : 'N/A';
+
+  const handleReadOriginal = () => {
+    if (item.original_url) {
+      // 触发点击原文埋点
+      trackEvent(item.processed_item_id, item.snapshot_date, 'click_original');
+      window.open(item.original_url, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   return (
     <div className="backdrop" onClick={onClose}>
@@ -87,7 +98,7 @@ export function Modal({ item, onClose }: ModalProps) {
           {item.original_url && (
             <button 
               className="btn-primary"
-              onClick={() => window.open(item.original_url!, '_blank', 'noopener,noreferrer')}
+              onClick={handleReadOriginal}
             >
               查看原文 →
             </button>

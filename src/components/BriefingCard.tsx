@@ -1,5 +1,6 @@
 import React from 'react';
 import { ProcessedItem } from '../types';
+import { useImpression, useTracking } from '../hooks/useTracking';
 
 interface BriefingCardProps {
   item: ProcessedItem;
@@ -8,6 +9,16 @@ interface BriefingCardProps {
 }
 
 export function BriefingCard({ item, index, onClick }: BriefingCardProps) {
+  const { trackEvent } = useTracking();
+  // 绑定曝光埋点
+  const cardRef = useImpression(item.processed_item_id, item.snapshot_date);
+
+  const handleCardClick = () => {
+    // 记录点击埋点（点击卡片打开弹窗也视为一次点击行为）
+    trackEvent(item.processed_item_id, item.snapshot_date, 'click');
+    onClick(item);
+  };
+
   const isFeatured = index === 0;
   const numStr = String(index + 1).padStart(3, '0');
   
@@ -20,7 +31,7 @@ export function BriefingCard({ item, index, onClick }: BriefingCardProps) {
 
   if (isFeatured) {
     return (
-      <article className="article featured" style={{ position: 'relative' }} onClick={() => onClick(item)}>
+      <article ref={cardRef as any} className="article featured" style={{ position: 'relative' }} onClick={handleCardClick}>
         <div className="stamp">
           <div className="stamp-inner">aha<br/>INDEX</div>
         </div>
@@ -57,7 +68,7 @@ export function BriefingCard({ item, index, onClick }: BriefingCardProps) {
   }
 
   return (
-    <article className="article" style={{ position: 'relative' }} onClick={() => onClick(item)}>
+    <article ref={cardRef as any} className="article" style={{ position: 'relative' }} onClick={handleCardClick}>
       <div className="article-num">{numStr}</div>
       <div className="article-body">
         <h2 className="article-title">
