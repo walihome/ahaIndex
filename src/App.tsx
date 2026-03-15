@@ -122,25 +122,43 @@ export default function App() {
   useEffect(() => {
     async function fetchItems() {
       try {
-        const now = new Date();
-        const today = now.getFullYear() + '-' + 
-                      String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                      String(now.getDate()).padStart(2, '0');
+        // 1. 获取数据库中最新的 snapshot_date
+        const { data: latestDateData, error: dateError } = await supabase
+          .from('display_items')
+          .select('snapshot_date')
+          .order('snapshot_date', { ascending: false })
+          .limit(1);
+
+        if (dateError) {
+          console.error('Error fetching latest date:', dateError);
+          setItems(MOCK_DATA);
+          setLoading(false);
+          return;
+        }
+
+        let targetDate = '';
+        if (latestDateData && latestDateData.length > 0) {
+          targetDate = latestDateData[0].snapshot_date;
+        } else {
+          // 如果数据库完全为空，降级到 mock 数据
+          setItems(MOCK_DATA);
+          setLoading(false);
+          return;
+        }
         
+        // 2. 根据最新的日期获取当天所有数据
         const { data, error } = await supabase
-          .from('display_items_test')
+          .from('display_items')
           .select('*')
-          .eq('snapshot_date', today)
+          .eq('snapshot_date', targetDate)
           .order('rank', { ascending: true });
 
         if (error) {
           console.error('Error fetching items:', error);
-          // Fallback to mock data on error (e.g., if Supabase is not configured)
           setItems(MOCK_DATA);
         } else if (data && data.length > 0) {
           setItems(data);
         } else {
-          // Fallback to mock data if empty
           setItems(MOCK_DATA);
         }
       } catch (err) {
