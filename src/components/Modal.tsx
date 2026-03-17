@@ -19,10 +19,8 @@ export function Modal({ item, onClose }: ModalProps) {
   }).replace(/\//g, ' / ') : '未知时间';
 
   const title = item.processed_title || '无标题';
-  const description = item.summary || '无摘要';
   const category = item.tags && item.tags.length > 0 ? item.tags[0] : '综合';
   const tags = item.tags ? item.tags.slice(1) : [];
-  const score = item.aha_index !== null ? (item.aha_index * 100).toFixed(1) : 'N/A';
 
   const handleReadOriginal = () => {
     if (item.original_url) {
@@ -65,26 +63,7 @@ export function Modal({ item, onClose }: ModalProps) {
           </div>
         </div>
 
-        <div className="aha-strip">
-          <div>
-            <div className="aha-label">AHA Score</div>
-            <div className="aha-score">{score}</div>
-          </div>
-          <div className="aha-bars">
-            <div className="s-bar" style={{ height: '35%' }}></div>
-            <div className="s-bar" style={{ height: '55%' }}></div>
-            <div className="s-bar" style={{ height: '45%' }}></div>
-            <div className="s-bar" style={{ height: '65%' }}></div>
-            <div className="s-bar" style={{ height: '50%' }}></div>
-            <div className="s-bar hi" style={{ height: `${item.aha_index ? item.aha_index * 100 : 78}%` }}></div>
-          </div>
-        </div>
-
         <div className="modal-body">
-          <p className="summary">
-            {description}
-          </p>
-
           <div className="section-label">Expert Insight</div>
           <div className="insight-block">
             <div className="insight-text">
