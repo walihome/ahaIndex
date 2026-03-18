@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Masthead } from './components/Masthead';
 import { Ticker } from './components/Ticker';
 import { NavBar } from './components/NavBar';
@@ -114,6 +115,7 @@ const MOCK_DATA: ProcessedItem[] = [
 ];
 
 export default function App() {
+  const { date } = useParams<{ date: string }>();
   const [items, setItems] = useState<ProcessedItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<ProcessedItem | null>(null);
@@ -122,35 +124,16 @@ export default function App() {
   useEffect(() => {
     async function fetchItems() {
       try {
-        // 1. 获取数据库中最新的 snapshot_date
-        const { data: latestDateData, error: dateError } = await supabase
-          .from('display_items')
-          .select('snapshot_date')
-          .order('snapshot_date', { ascending: false })
-          .limit(1);
-
-        if (dateError) {
-          console.error('Error fetching latest date:', dateError);
+        if (!date) {
           setItems(MOCK_DATA);
           setLoading(false);
           return;
         }
 
-        let targetDate = '';
-        if (latestDateData && latestDateData.length > 0) {
-          targetDate = latestDateData[0].snapshot_date;
-        } else {
-          // 如果数据库完全为空，降级到 mock 数据
-          setItems(MOCK_DATA);
-          setLoading(false);
-          return;
-        }
-        
-        // 2. 根据最新的日期获取当天所有数据
         const { data, error } = await supabase
           .from('display_items')
           .select('*')
-          .eq('snapshot_date', targetDate)
+          .eq('snapshot_date', date)
           .order('rank', { ascending: true });
 
         if (error) {
@@ -170,7 +153,7 @@ export default function App() {
     }
 
     fetchItems();
-  }, []);
+  }, [date]);
 
   // Async Hydration: Simulate fetching dynamic data (views, likes) after initial render
   useEffect(() => {
