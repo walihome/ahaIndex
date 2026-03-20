@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&family=Noto+Serif+SC:wght@300;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Noto+Serif+SC:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -43,18 +43,17 @@ body::before {
 /* ─── MASTHEAD ─────────────────────────────────────── */
 .masthead {
   background: var(--paper);
-  border-bottom: 2px solid var(--ink);
+  padding: 16px 32px;
+  border-bottom: 1px solid rgba(28,26,23,0.08);
 }
 
 .masthead-inner {
-  max-width: 1200px;
+  max-width: 1024px;
   margin: 0 auto;
-  padding: 0 48px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 24px;
-  height: 80px;
   width: 100%;
 }
 
@@ -78,52 +77,61 @@ body::before {
   height: 15px;
 }
 
-.logo-aha {
-  font-family: var(--font-playfair);
+.logo-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
   font-style: italic;
-  font-weight: 900;
-  color: var(--ink);
-  letter-spacing: -0.02em;
-  line-height: 1;
-  font-size: 28px;
+  color: #1c1a17;
+  letter-spacing: -0.3px;
 }
 
-.logo-zh {
-  font-family: var(--font-noto);
-  font-weight: 300;
-  color: var(--ink);
-  letter-spacing: 0.02em;
-  line-height: 1;
-  margin-left: 1px;
-  font-size: 28px;
-}
-
-.logo-dot {
-  background: var(--accent);
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-left: 3px;
-  width: 5px;
-  height: 5px;
-  position: relative;
-  top: -7px;
+.logo-text span {
+  color: #c0392b;
+  font-weight: 700;
 }
 
 .masthead-title {
   text-align: center;
+}
+
+.masthead-tagline {
+  font-family: 'DM Sans', sans-serif;
   font-size: 9px;
-  letter-spacing: 0.25em;
-  color: var(--muted);
-  line-height: 1.8;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: #a09890;
   text-transform: uppercase;
+  display: block;
+  line-height: 1;
+}
+
+.masthead-subtitle {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 14px;
+  font-weight: 400;
+  font-style: italic;
+  color: #6b6560;
+  display: block;
+  margin-top: 4px;
+  line-height: 1;
 }
 
 .masthead-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
   text-align: right;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  color: var(--muted);
-  text-transform: uppercase;
+}
+
+.masthead-vol {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  color: #8c8480;
+  text-align: right;
   line-height: 1.8;
 }
 
@@ -134,9 +142,9 @@ body::before {
 }
 
 .nav-inner {
-  max-width: 1200px;
+  max-width: 1088px;
   margin: 0 auto;
-  padding: 0 48px;
+  padding: 0 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -200,21 +208,21 @@ body::before {
   display: grid;
   grid-template-columns: 1fr 300px;
   gap: 0;
-  max-width: 1200px;
+  max-width: 1088px;
   margin: 0 auto;
-  padding: 0 48px;
+  padding: 0 32px;
   min-height: calc(100vh - 164px);
   background: var(--paper);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
 }
 
 .main-col {
-  padding: 48px 48px 48px 0;
+  padding: 40px 32px 40px 0;
   border-right: 1px solid var(--border);
 }
 
 .side-col {
-  padding: 48px 0 48px 40px;
+  padding: 40px 0 40px 32px;
 }
 
 /* ─── ARTICLE CARDS ────────────────────────────────── */
@@ -544,7 +552,7 @@ body::before {
 
 /* ─── FEATURED (FIRST ARTICLE) ─────────────────────── */
 .article.featured {
-  padding: 0 0 40px 0;
+  padding: 0 0 32px 0;
   grid-template-columns: 1fr;
   gap: 0;
 }
@@ -580,9 +588,9 @@ body::before {
 }
 
 .footer-inner {
-  max-width: 1200px;
+  max-width: 1088px;
   margin: 0 auto;
-  padding: 24px 48px;
+  padding: 24px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1009,6 +1017,9 @@ body::before {
 }
 
 @media (max-width: 768px) {
+  .masthead {
+    padding: 0;
+  }
   .masthead-inner {
     grid-template-columns: 1fr auto;
     height: 44px;
@@ -1022,18 +1033,13 @@ body::before {
   .masthead-title {
     display: none;
   }
-  .logo-aha, .logo-zh {
+  .logo-text {
     font-size: 16px;
   }
   .logo-icon {
     width: 14px;
     height: 11px;
     margin-right: 5px;
-  }
-  .logo-dot {
-    width: 3px;
-    height: 3px;
-    top: -4px;
   }
   .masthead-meta {
     display: flex;
