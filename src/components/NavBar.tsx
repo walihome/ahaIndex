@@ -22,7 +22,12 @@ export function NavBar({ categories, selectedCategory, onSelectCategory }: NavBa
               className={`nav-tab ${selectedCategory === category ? 'active' : ''}`}
               onClick={() => onSelectCategory(category)}
             >
-              {category}
+              {category.toUpperCase() === 'ENTERTAINMENT' ? (
+                <>
+                  <span className="cat-desktop">{category}</span>
+                  <span className="cat-mobile">ENT</span>
+                </>
+              ) : category}
             </button>
           ))}
         </div>

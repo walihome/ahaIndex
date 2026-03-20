@@ -1,7 +1,6 @@
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { getTodayDate } from './lib/date';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 
@@ -9,7 +8,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to={`/daily/${getTodayDate()}`} replace />} />
+        <Route path="/" element={<App />} />
         <Route path="/daily/:date" element={<App />} />
       </Routes>
     </BrowserRouter>

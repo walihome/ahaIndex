@@ -36,31 +36,11 @@ export function Modal({ item, onClose }: ModalProps) {
         <div className="drag-handle"></div>
 
         <div className="modal-header">
-          <div className="modal-topbar">
-            <div className="tag-row">
-              <span className="tag primary">{category}</span>
-              {tags.slice(0, 1).map((tag, i) => (
-                <span key={i} className="tag">{tag}</span>
-              ))}
-              {item.source_name && (
-                <span className="article-source-name">{item.source_name}</span>
-              )}
-              {item.display_metrics?.items?.filter(m => m.label !== '📖 来源').map((metric, i) => (
-                <span key={i} className="article-metric">
-                  <span className="metric-label">{metric.label}</span>
-                  <span className="metric-value">{metric.value}</span>
-                </span>
-              ))}
-            </div>
+          <div className="modal-topbar" style={{ justifyContent: 'flex-end', marginBottom: 0 }}>
             <div className="close-btn" onClick={onClose}>✕</div>
           </div>
 
           <h1 className="modal-title">{title}</h1>
-
-          <div className="modal-meta">
-            <span className="meta-text">{item.original_url ? new URL(item.original_url).hostname : '未知来源'}</span>
-            <span className="meta-date">{dateStr}</span>
-          </div>
         </div>
 
         <div className="modal-body">

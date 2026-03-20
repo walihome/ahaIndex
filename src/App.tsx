@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Masthead } from './components/Masthead';
-import { Ticker } from './components/Ticker';
 import { NavBar } from './components/NavBar';
 import { BriefingCard } from './components/BriefingCard';
 import { Sidebar } from './components/Sidebar';
@@ -116,6 +115,7 @@ const MOCK_DATA: ProcessedItem[] = [
 
 export default function App() {
   const { date } = useParams<{ date: string }>();
+  const navigate = useNavigate();
   const [items, setItems] = useState<ProcessedItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<ProcessedItem | null>(null);
@@ -124,16 +124,29 @@ export default function App() {
   useEffect(() => {
     async function fetchItems() {
       try {
-        if (!date) {
-          setItems(MOCK_DATA);
-          setLoading(false);
-          return;
+        let targetDate = date;
+
+        if (!targetDate) {
+          const { data: latestData, error: latestError } = await supabase
+            .from('display_items')
+            .select('snapshot_date')
+            .order('snapshot_date', { ascending: false })
+            .limit(1);
+
+          if (latestError || !latestData || latestData.length === 0) {
+            setItems(MOCK_DATA);
+            setLoading(false);
+            return;
+          }
+          targetDate = latestData[0].snapshot_date;
+          navigate(`/daily/${targetDate}`, { replace: true });
+          return; // The navigation will trigger a re-render with the new date
         }
 
         const { data, error } = await supabase
           .from('display_items')
           .select('*')
-          .eq('snapshot_date', date)
+          .eq('snapshot_date', targetDate)
           .order('rank', { ascending: true });
 
         if (error) {
@@ -153,7 +166,7 @@ export default function App() {
     }
 
     fetchItems();
-  }, [date]);
+  }, [date, navigate]);
 
   // Async Hydration: Simulate fetching dynamic data (views, likes) after initial render
   useEffect(() => {
@@ -183,8 +196,7 @@ export default function App() {
 
   return (
     <>
-      <Masthead />
-      <Ticker items={items} />
+      <Masthead items={items} />
       <NavBar 
         categories={categories} 
         selectedCategory={selectedCategory} 
@@ -216,7 +228,7 @@ export default function App() {
           </div>
         </main>
 
-        <Sidebar />
+        <Sidebar items={items} />
       </div>
 
       <Footer />
