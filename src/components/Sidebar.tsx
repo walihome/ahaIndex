@@ -78,7 +78,7 @@ export function Sidebar({ items = [] }: SidebarProps) {
         <div className="divider"></div>
 
         <p className="about-text">
-          "aha指数" 是一套基于多维度量化算法的评估系统，旨在发掘当下最具颠覆性与美学价值的创新成果。
+          "AHA 指数" 是一套基于多维度量化算法的评估系统，旨在发掘当下最具颠覆性与美学价值的创新成果。
         </p>
 
         <div className="version-info">

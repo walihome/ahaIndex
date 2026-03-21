@@ -6,9 +6,10 @@ interface BriefingCardProps {
   item: ProcessedItem;
   index: number;
   onClick: (item: ProcessedItem) => void;
+  showDate?: boolean;
 }
 
-export function BriefingCard({ item, index, onClick }: BriefingCardProps) {
+export function BriefingCard({ item, index, onClick, showDate }: BriefingCardProps) {
   const { trackEvent } = useTracking();
   // 绑定曝光埋点
   const cardRef = useImpression(item.processed_item_id, item.snapshot_date);
@@ -19,11 +20,22 @@ export function BriefingCard({ item, index, onClick }: BriefingCardProps) {
     onClick(item);
   };
 
-  const isFeatured = index === 0;
+  const isFeatured = index === 0 && !showDate;
   const numStr = String(index + 1).padStart(3, '0');
   
   // Format date relative or simple
   const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString() : '未知时间';
+  
+  let displayLeft = numStr;
+  if (showDate && item.snapshot_date) {
+    const parts = item.snapshot_date.split('-');
+    if (parts.length === 3) {
+      displayLeft = `${parts[1]}.${parts[2]}`;
+    } else {
+      displayLeft = item.snapshot_date;
+    }
+  }
+
   const title = item.processed_title || '无标题';
   const description = item.summary || '无摘要';
   const category = item.tags && item.tags.length > 0 ? item.tags[0] : '综合';
@@ -69,7 +81,7 @@ export function BriefingCard({ item, index, onClick }: BriefingCardProps) {
 
   return (
     <article ref={cardRef as any} className="article" style={{ position: 'relative' }} onClick={handleCardClick}>
-      <div className="article-num">{numStr}</div>
+      <div className="article-num">{displayLeft}</div>
       <div className="article-body">
         <h2 className="article-title">
           {title}

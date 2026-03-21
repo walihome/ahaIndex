@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="footer-inner">
-        <span>© {today.getFullYear()} aha指数 · The Absolute Threshold</span>
+        <span>© {today.getFullYear()} AHA 指数 · The Absolute Threshold</span>
         <span>Vol. {today.getMonth() + 1} · Issue {dateStr}</span>
         <span>版权所有 · All rights reserved</span>
       </div>

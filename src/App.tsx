@@ -9,7 +9,7 @@ import { Modal } from './components/Modal';
 import { supabase } from './lib/supabase';
 import { ProcessedItem } from './types';
 
-const MOCK_DATA: ProcessedItem[] = [
+export const MOCK_DATA: ProcessedItem[] = [
   {
     id: '1',
     processed_item_id: 'p1',
