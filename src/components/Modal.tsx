@@ -113,20 +113,6 @@ export function Modal({ item, onClose }: ModalProps) {
           </div>
         </div>
 
-        <div className="aha-strip">
-          <div>
-            <div className="aha-label">AMAZING INDEX</div>
-            <div className="aha-score">{item.aha_index ? (item.aha_index * 100).toFixed(1) : '0.0'}</div>
-          </div>
-          <div className="aha-bars">
-            <div className="s-bar"></div>
-            <div className="s-bar hi"></div>
-            <div className="s-bar"></div>
-            <div className="s-bar hi"></div>
-            <div className="s-bar"></div>
-          </div>
-        </div>
-
         <div className="modal-body">
           {summary && (
             <p className="summary">{summary}</p>
