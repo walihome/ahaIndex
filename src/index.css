@@ -399,23 +399,6 @@ body::before {
   margin-top: 8px;
 }
 
-.score-delta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: #2d7a4f;
-  margin-top: 12px;
-  background: rgba(45, 122, 79, 0.1);
-  padding: 4px 10px;
-}
-
-.score-delta::before {
-  content: '▲';
-  font-size: 7px;
-}
-
 .score-chart {
   height: 60px;
   margin: 24px 0;

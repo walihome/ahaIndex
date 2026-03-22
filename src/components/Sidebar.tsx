@@ -41,7 +41,6 @@ export function Sidebar({ items = [] }: SidebarProps) {
         <div className="score-display">
           <span className="score-number">{ahaScore}</span>
           <div className="score-unit">Absolute Threshold Score</div>
-          <div className="score-delta">2.3% VS YESTERDAY</div>
         </div>
 
         {/* Mini bar chart */}
