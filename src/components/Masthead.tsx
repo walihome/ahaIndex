@@ -66,7 +66,7 @@ export function Masthead({ items = [] }: MastheadProps) {
           <div className="aha-score-mobile">
             <span className="score-trigger" onClick={(e) => { e.stopPropagation(); setShowTooltip(!showTooltip); }}>{ahaScore}</span>
             <div className={`score-tooltip ${showTooltip ? 'show' : ''}`} onClick={(e) => e.stopPropagation()}>
-              <div className="tooltip-label">今日 AHA 指数</div>
+              <div className="tooltip-label">今日 AmazingIndex</div>
               <div className="tooltip-score">{ahaScore}</div>
               <div className="tooltip-trend">▲ 2.3% 较昨日</div>
               <div className="tooltip-divider"></div>

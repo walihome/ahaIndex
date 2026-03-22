@@ -798,6 +798,16 @@ body::before {
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+}
+
+.meta-star-icon {
+  color: #e6a817;
+  font-size: 15px;
+  margin-right: 4px;
+  line-height: 1;
+  transform: translateY(-2px);
 }
 
 .meta-date {
@@ -885,6 +895,16 @@ body::before {
   border-left: 2px solid var(--accent);
 }
 
+.modal-description-en {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 13px;
+  color: rgba(26,23,20,0.6);
+  font-style: italic;
+  margin-bottom: 24px;
+  line-height: 1.6;
+  padding-left: 12px;
+}
+
 .insight-block {
   background: var(--paper-dark);
   padding: 16px;
@@ -899,6 +919,13 @@ body::before {
   color: var(--ink);
 }
 .insight-text em { font-style: italic; color: var(--muted); }
+
+.insight-paragraph {
+  margin-bottom: 12px;
+}
+.insight-paragraph:last-child {
+  margin-bottom: 0;
+}
 
 .key-points { margin-bottom: 24px; }
 

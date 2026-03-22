@@ -24,6 +24,7 @@ export interface ProcessedItem {
   expert_insight: string | null;
   display_metrics: DisplayMetrics | null;
   raw_metrics: any | null;
+  extra?: any | null;
   rank: number;
   model: string | null;
   created_at: string | null;
