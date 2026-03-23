@@ -13,8 +13,24 @@ export function Modal({ item, onClose }: ModalProps) {
   const [showStarHistory, setShowStarHistory] = useState(true);
 
   useLayoutEffect(() => {
-    // Lock body scroll synchronously before paint to prevent initial scroll leak
-    const originalStyle = document.body.style.overflow;
+    // Record current scroll position
+    const scrollY = window.scrollY;
+    
+    // Save original body styles
+    const originalStyle = window.getComputedStyle(document.body);
+    const originalPosition = originalStyle.position;
+    const originalTop = originalStyle.top;
+    const originalLeft = originalStyle.left;
+    const originalRight = originalStyle.right;
+    const originalWidth = originalStyle.width;
+    const originalOverflow = originalStyle.overflow;
+
+    // Apply fixed positioning to lock body completely (fixes iOS Safari bypass)
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
     document.body.style.overflow = 'hidden';
 
     // Prevent touchmove on non-scrollable areas (backdrop, header, footer)
@@ -22,6 +38,8 @@ export function Modal({ item, onClose }: ModalProps) {
       const target = e.target as HTMLElement;
       // Allow scrolling if the touch is inside the modal body
       if (target.closest('.modal-body')) {
+        // Stop propagation so it doesn't bubble up and trigger default behavior on document
+        e.stopPropagation();
         return;
       }
       // Otherwise, prevent default to stop background scrolling/rubber-banding
@@ -30,11 +48,37 @@ export function Modal({ item, onClose }: ModalProps) {
       }
     };
 
-    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    const handleTouchStart = (e: TouchEvent) => {
+      const target = e.target as HTMLElement;
+      const modalBody = target.closest('.modal-body') as HTMLElement;
+      if (modalBody) {
+        // Prevent reaching the exact top or bottom to avoid iOS rubber-banding
+        if (modalBody.scrollTop === 0) {
+          modalBody.scrollTop = 1;
+        } else if (modalBody.scrollTop + modalBody.clientHeight === modalBody.scrollHeight) {
+          modalBody.scrollTop -= 1;
+        }
+      }
+    };
+
+    // Use capture phase to intercept events early
+    document.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
+    document.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
 
     return () => {
-      document.body.style.overflow = originalStyle;
-      document.removeEventListener('touchmove', handleTouchMove);
+      // Restore original styles
+      document.body.style.position = originalPosition;
+      document.body.style.top = originalTop;
+      document.body.style.left = originalLeft;
+      document.body.style.right = originalRight;
+      document.body.style.width = originalWidth;
+      document.body.style.overflow = originalOverflow;
+      
+      // Restore scroll position instantly
+      window.scrollTo(0, scrollY);
+      
+      document.removeEventListener('touchmove', handleTouchMove, { capture: true });
+      document.removeEventListener('touchstart', handleTouchStart, { capture: true });
     };
   }, []);
 
