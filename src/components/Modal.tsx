@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { ProcessedItem } from '../types';
 import { useTracking } from '../hooks/useTracking';
 
@@ -12,12 +12,29 @@ export function Modal({ item, onClose }: ModalProps) {
   const [showCover, setShowCover] = useState(true);
   const [showStarHistory, setShowStarHistory] = useState(true);
 
-  useEffect(() => {
-    // Lock body scroll when modal is open
-    const originalStyle = window.getComputedStyle(document.body).overflow;
+  useLayoutEffect(() => {
+    // Lock body scroll synchronously before paint to prevent initial scroll leak
+    const originalStyle = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+
+    // Prevent touchmove on non-scrollable areas (backdrop, header, footer)
+    const handleTouchMove = (e: TouchEvent) => {
+      const target = e.target as HTMLElement;
+      // Allow scrolling if the touch is inside the modal body
+      if (target.closest('.modal-body')) {
+        return;
+      }
+      // Otherwise, prevent default to stop background scrolling/rubber-banding
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+
     return () => {
       document.body.style.overflow = originalStyle;
+      document.removeEventListener('touchmove', handleTouchMove);
     };
   }, []);
 
