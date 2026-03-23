@@ -685,6 +685,7 @@ body::before {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 10;
+  overscroll-behavior: none;
 }
 
 /* ─── BOTTOM SHEET (Mobile Default) ───────────────── */
@@ -703,6 +704,7 @@ body::before {
   padding-bottom: env(safe-area-inset-bottom, 0px);
   box-shadow: 0 -8px 48px rgba(0,0,0,0.35);
   animation: sheet-up 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  overscroll-behavior: none;
 }
 
 @keyframes sheet-up {

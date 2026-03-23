@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ProcessedItem } from '../types';
 import { useTracking } from '../hooks/useTracking';
 
@@ -11,6 +11,15 @@ export function Modal({ item, onClose }: ModalProps) {
   const { trackEvent } = useTracking();
   const [showCover, setShowCover] = useState(true);
   const [showStarHistory, setShowStarHistory] = useState(true);
+
+  useEffect(() => {
+    // Lock body scroll when modal is open
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, []);
 
   const handleReadOriginal = () => {
     if (item.original_url) {
