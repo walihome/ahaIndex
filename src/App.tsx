@@ -6,8 +6,9 @@ import { BriefingCard } from './components/BriefingCard';
 import { Sidebar } from './components/Sidebar';
 import { Footer } from './components/Footer';
 import { Modal } from './components/Modal';
-const OSS_BASE = 'https://amazingindex.oss-cn-hangzhou.aliyuncs.com';
 import { ProcessedItem } from './types';
+
+const OSS_BASE = 'https://amazingindex.oss-cn-hangzhou.aliyuncs.com';
 
 export const MOCK_DATA: ProcessedItem[] = [
   {
@@ -113,11 +114,22 @@ export const MOCK_DATA: ProcessedItem[] = [
   }
 ];
 
+declare global {
+  interface Window {
+    __PRELOADED_DATA__?: {
+      snapshot_date: string;
+      items: ProcessedItem[];
+    };
+  }
+}
+
+const PRELOADED = window.__PRELOADED_DATA__;
+
 export default function App() {
   const { date } = useParams<{ date: string }>();
   const navigate = useNavigate();
-  const [items, setItems] = useState<ProcessedItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<ProcessedItem[]>(PRELOADED?.items || []);
+  const [loading, setLoading] = useState(!PRELOADED);
   const [selectedItem, setSelectedItem] = useState<ProcessedItem | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('全部');
 
@@ -127,6 +139,10 @@ export default function App() {
         let targetDate = date;
 
         if (!targetDate) {
+          if (PRELOADED) {
+            navigate(`/daily/${PRELOADED.snapshot_date}`, { replace: true });
+            return;
+          }
           try {
             const resp = await fetch(`${OSS_BASE}/api/latest.json`);
             if (!resp.ok) throw new Error('Network response was not ok');
@@ -140,6 +156,13 @@ export default function App() {
           return; // The navigation will trigger a re-render with the new date
         }
 
+        if (PRELOADED && targetDate === PRELOADED.snapshot_date) {
+          setItems(PRELOADED.items);
+          setLoading(false);
+          return;
+        }
+
+        setLoading(true);
         try {
           const resp = await fetch(
             `${OSS_BASE}/api/daily/${targetDate.slice(0,4)}/${targetDate.slice(5,7)}/${targetDate}.json`
