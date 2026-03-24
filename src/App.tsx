@@ -6,7 +6,7 @@ import { BriefingCard } from './components/BriefingCard';
 import { Sidebar } from './components/Sidebar';
 import { Footer } from './components/Footer';
 import { Modal } from './components/Modal';
-import { supabase } from './lib/supabase';
+const OSS_BASE = 'https://amazingindex.oss-cn-hangzhou.aliyuncs.com';
 import { ProcessedItem } from './types';
 
 export const MOCK_DATA: ProcessedItem[] = [
@@ -127,34 +127,31 @@ export default function App() {
         let targetDate = date;
 
         if (!targetDate) {
-          const { data: latestData, error: latestError } = await supabase
-            .from('display_items')
-            .select('snapshot_date')
-            .order('snapshot_date', { ascending: false })
-            .limit(1);
-
-          if (latestError || !latestData || latestData.length === 0) {
-            setItems(MOCK_DATA);
-            setLoading(false);
-            return;
+          try {
+            const resp = await fetch(`${OSS_BASE}/api/latest.json`);
+            if (!resp.ok) throw new Error('Network response was not ok');
+            const json = await resp.json();
+            targetDate = json.snapshot_date;
+          } catch (err) {
+            console.warn('Failed to fetch latest.json, falling back to mock data date.');
+            targetDate = MOCK_DATA[0].snapshot_date;
           }
-          targetDate = latestData[0].snapshot_date;
           navigate(`/daily/${targetDate}`, { replace: true });
           return; // The navigation will trigger a re-render with the new date
         }
 
-        const { data, error } = await supabase
-          .from('display_items')
-          .select('*')
-          .eq('snapshot_date', targetDate)
-          .order('rank', { ascending: true });
-
-        if (error) {
-          console.error('Error fetching items:', error);
-          setItems(MOCK_DATA);
-        } else if (data && data.length > 0) {
-          setItems(data);
-        } else {
+        try {
+          const resp = await fetch(
+            `${OSS_BASE}/api/daily/${targetDate.slice(0,4)}/${targetDate.slice(5,7)}/${targetDate}.json`
+          );
+          if (resp.ok) {
+            const json = await resp.json();
+            setItems(json.items && json.items.length > 0 ? json.items : MOCK_DATA);
+          } else {
+            setItems(MOCK_DATA);
+          }
+        } catch (err) {
+          console.warn(`Failed to fetch daily data for ${targetDate}, falling back to mock data.`);
           setItems(MOCK_DATA);
         }
       } catch (err) {
