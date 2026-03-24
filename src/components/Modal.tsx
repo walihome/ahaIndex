@@ -199,7 +199,10 @@ export function Modal({ item, onClose }: ModalProps) {
               <img
                 src={extra.readme_images[0]}
                 alt="封面图"
-                style={{ width: '100%', borderRadius: '6px', border: '1px solid var(--border)' }}
+                loading="lazy"
+                width="800"
+                height="400"
+                style={{ width: '100%', height: 'auto', aspectRatio: '2 / 1', objectFit: 'cover', borderRadius: '6px', border: '1px solid var(--border)' }}
                 onError={() => setShowCover(false)}
               />
             </div>
@@ -222,7 +225,10 @@ export function Modal({ item, onClose }: ModalProps) {
               <img
                 src={extra.star_history_url}
                 alt="Star History"
-                style={{ width: '100%', borderRadius: '6px', border: '1px solid var(--border)' }}
+                loading="lazy"
+                width="800"
+                height="400"
+                style={{ width: '100%', height: 'auto', aspectRatio: '2 / 1', objectFit: 'cover', borderRadius: '6px', border: '1px solid var(--border)' }}
                 onError={() => setShowStarHistory(false)}
               />
             </div>

@@ -955,13 +955,14 @@ body::before {
 
   .drag-handle { display: none; }
 
-  .modal-header { padding: 28px 32px 0; }
-  .modal-body   { padding: 28px 32px 0; }
-  .modal-footer { padding: 16px 32px 24px; }
+  .modal-header { padding: 24px 32px 0; }
+  .modal-body   { padding: 20px 32px 0; }
+  .modal-footer { padding: 12px 32px 16px; }
 
   .modal-title { font-size: 24px; }
 
-  .btn-primary { flex: 0 0 auto; padding: 0 24px; }
+  .btn-primary { flex: 0 0 auto; padding: 0 20px; height: 36px; }
+  .close-footer-btn { width: 36px; height: 36px; }
 }
 
 /* ─── MOBILE OVERRIDE (≤ 768px) ────────────────────── */

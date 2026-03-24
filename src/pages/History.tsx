@@ -6,7 +6,6 @@ import { BriefingCard } from '../components/BriefingCard';
 import { Sidebar } from '../components/Sidebar';
 import { Footer } from '../components/Footer';
 import { Modal } from '../components/Modal';
-import { supabase } from '../lib/supabase';
 import { ProcessedItem } from '../types';
 import { MOCK_DATA } from '../App';
 
@@ -20,6 +19,7 @@ export default function History() {
   useEffect(() => {
     async function fetchHistoryItems() {
       try {
+        const { supabase } = await import('../lib/supabase');
         const { data, error } = await supabase
           .from('display_items')
           .select('*')

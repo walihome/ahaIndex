@@ -44,9 +44,6 @@ export function BriefingCard({ item, index, onClick, showDate }: BriefingCardPro
   if (isFeatured) {
     return (
       <article ref={cardRef as any} className="article featured" style={{ position: 'relative' }} onClick={handleCardClick}>
-        <div className="stamp">
-          <div className="stamp-inner">aha<br/>INDEX</div>
-        </div>
         <span className="article-num">NO. {numStr}</span>
         <div className="featured-accent"></div>
         <h2 className="article-title">
