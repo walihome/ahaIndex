@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Masthead } from './components/Masthead';
 import { NavBar } from './components/NavBar';
 import { BriefingCard } from './components/BriefingCard';
@@ -126,7 +126,7 @@ declare global {
 const PRELOADED = window.__PRELOADED_DATA__;
 
 export default function App() {
-  const { date } = useParams<{ date: string }>();
+  const { dateOrMonth: date } = useParams<{ dateOrMonth: string }>();
   const navigate = useNavigate();
   const [items, setItems] = useState<ProcessedItem[]>(PRELOADED?.items || []);
   const [loading, setLoading] = useState(!PRELOADED);
@@ -251,7 +251,7 @@ export default function App() {
         <Sidebar items={items} />
       </div>
 
-      <Footer />
+      <Footer showArchiveBanner={true} />
 
       {selectedItem && (
         <Modal 

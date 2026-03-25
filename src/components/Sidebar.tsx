@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { ProcessedItem } from '../types';
+import { fetchStats, fetchDays, GlobalStats, DailyArchive } from '../lib/api';
+import '../pages/Archive.css';
 
 interface SidebarProps {
   items?: ProcessedItem[];
 }
 
 export function Sidebar({ items = [] }: SidebarProps) {
+  const navigate = useNavigate();
+  const [stats, setStats] = useState<GlobalStats | null>(null);
+  const [days, setDays] = useState<DailyArchive[]>([]);
+
+  useEffect(() => {
+    fetchStats().then(setStats);
+    const now = new Date();
+    fetchDays(now.getFullYear(), now.getMonth() + 1).then(setDays);
+  }, []);
+
   const ahaScore = items.length > 0 
     ? (items.reduce((sum, item) => sum + (item.aha_index || 0), 0) / items.length * 100).toFixed(1)
     : '0.0';
@@ -32,6 +45,72 @@ export function Sidebar({ items = [] }: SidebarProps) {
     timeliness = Math.min(100, Math.round(tSum / count));
     impact = Math.min(100, Math.round(iSum / count));
   }
+
+  const renderMiniCalendar = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = now.getDate();
+
+    const weeks: (number | null)[][] = [];
+    let currentWeek: (number | null)[] = Array(7).fill(null);
+    
+    for (let i = 0; i < firstDay; i++) {
+      currentWeek[i] = null;
+    }
+    
+    let currentDay = 1;
+    for (let i = firstDay; i < 7; i++) {
+      currentWeek[i] = currentDay++;
+    }
+    weeks.push(currentWeek);
+    
+    while (currentDay <= daysInMonth) {
+      currentWeek = Array(7).fill(null);
+      for (let i = 0; i < 7 && currentDay <= daysInMonth; i++) {
+        currentWeek[i] = currentDay++;
+      }
+      weeks.push(currentWeek);
+    }
+
+    return (
+      <table className="mini-cal" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px', textAlign: 'center' }}>
+        <thead>
+          <tr><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr>
+        </thead>
+        <tbody>
+          {weeks.map((week, i) => (
+            <tr key={i}>
+              {week.map((day, j) => {
+                if (!day) return <td key={j}></td>;
+                
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const hasEdition = days.some(d => d.archive_date === dateStr && d.total_items > 0);
+                const isToday = day === today;
+                
+                let className = '';
+                if (hasEdition) className += ' has-ed';
+                if (isToday) className += ' today-cell';
+                if (!hasEdition && day < today) className += ' empty';
+
+                return (
+                  <td 
+                    key={j} 
+                    className={className.trim()}
+                    onClick={() => hasEdition ? navigate(`/daily/${dateStr}`) : undefined}
+                  >
+                    {day}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   return (
     <aside className="side-col">
@@ -83,6 +162,17 @@ export function Sidebar({ items = [] }: SidebarProps) {
         <div className="version-info">
           <span>Version 1.2.0</span>
           <span style={{ textAlign: 'right' }}>© {new Date().getFullYear()} Index</span>
+        </div>
+
+        {/* Archive Entry */}
+        <div className="sidebar-archive" style={{ marginTop: '40px' }}>
+          <div className="sidebar-archive-section">
+            <div className="sidebar-archive-title">Archive</div>
+            {renderMiniCalendar()}
+            <Link to="/daily" style={{ display: 'block', textAlign: 'center', fontSize: '10px', letterSpacing: '1px', color: 'var(--accent)', marginTop: '16px', textDecoration: 'none' }}>
+              View All {stats?.total_editions || 0} Editions →
+            </Link>
+          </div>
         </div>
       </div>
     </aside>
