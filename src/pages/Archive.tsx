@@ -115,6 +115,7 @@ export default function Archive() {
   }, [dateOrMonth]);
 
   const handleYearClick = (year: number) => {
+    window.scrollTo(0, 0);
     navigate('/daily');
     setSelectedYear(year);
   };
@@ -160,7 +161,7 @@ export default function Archive() {
 
           if (!monthData) {
             return (
-              <Link to={`/daily/${selectedYear}-${String(monthNum).padStart(2, '0')}`} key={monthNum} className={`month-cell ${isCurrent ? 'current' : ''}`}>
+              <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${selectedYear}-${String(monthNum).padStart(2, '0')}`} key={monthNum} className={`month-cell ${isCurrent ? 'current' : ''}`}>
                 <div className="mc-label">{MONTH_NAMES[monthNum - 1]}</div>
                 <div className="mc-score">--</div>
                 <div className="mc-score-sub">Avg Aha Score</div>
@@ -171,7 +172,7 @@ export default function Archive() {
           }
 
           return (
-            <Link to={`/daily/${selectedYear}-${String(monthNum).padStart(2, '0')}`} key={monthNum} className={`month-cell ${isCurrent ? 'current' : ''}`}>
+            <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${selectedYear}-${String(monthNum).padStart(2, '0')}`} key={monthNum} className={`month-cell ${isCurrent ? 'current' : ''}`}>
               <div className="mc-label">{MONTH_NAMES[monthNum - 1]}</div>
               <div className="mc-score">{monthData.avg_aha_score.toFixed(1)}</div>
               <div className="mc-score-sub">Avg Aha Score</div>
@@ -197,9 +198,8 @@ export default function Archive() {
         <div className="month-detail-header">
           <h2>{MONTH_NAMES[selectedMonth - 1]} {selectedYear}</h2>
           <span className="cnt">{monthData?.item_count || 0} Items Recorded</span>
-          <Link to="/daily" className="lnk" onClick={(e) => {
-            e.preventDefault();
-            navigate('/daily');
+          <Link to="/daily" className="lnk" onClick={() => {
+            window.scrollTo(0, 0);
           }}>Back to Overview ↑</Link>
         </div>
         
@@ -272,7 +272,7 @@ export default function Archive() {
                           <a href={item.url} target="_blank" rel="noopener noreferrer" className="ir-link">Read Full Briefing →</a>
                         </div>
                       ))}
-                      <Link to={`/daily/${day.snapshot_date}`} className="ir-more">View all {day.item_count} items for this day →</Link>
+                      <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${day.snapshot_date}`} className="ir-more">View all {day.item_count} items for this day →</Link>
                     </div>
                   </div>
                 );
@@ -292,7 +292,7 @@ export default function Archive() {
       <div className="layout">
         <div className="main-col">
           <div className="breadcrumb">
-            <Link to="/">Home</Link><span className="sep">/</span>Archive
+            <Link onClick={() => window.scrollTo(0, 0)} to="/">Home</Link><span className="sep">/</span>Archive
           </div>
           
           <div className="page-header">

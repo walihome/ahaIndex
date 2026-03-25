@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { Share } from 'lucide-react';
 import { ProcessedItem } from '../types';
 
 interface MastheadProps {
   items?: ProcessedItem[];
+  onShare?: () => void;
+  generating?: boolean;
 }
 
-export function Masthead({ items = [] }: MastheadProps) {
+export function Masthead({ items = [], onShare, generating }: MastheadProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const now = new Date();
   const year = now.getFullYear();
@@ -63,6 +66,21 @@ export function Masthead({ items = [] }: MastheadProps) {
         </div>
 
         <div className="masthead-meta">
+          {onShare && (
+            <button
+              onClick={onShare}
+              disabled={generating}
+              title="分享卡片"
+              style={{
+                background: "transparent", border: "none",
+                color: "#c43e27", padding: "4px", borderRadius: "50%",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                cursor: "pointer", opacity: generating ? 0.5 : 1,
+              }}
+            >
+              <Share size={18} strokeWidth={2.5} />
+            </button>
+          )}
           <div className="aha-score-mobile">
             <span className="score-trigger" onClick={(e) => { e.stopPropagation(); setShowTooltip(!showTooltip); }}>{ahaScore}</span>
             <div className={`score-tooltip ${showTooltip ? 'show' : ''}`} onClick={(e) => e.stopPropagation()}>

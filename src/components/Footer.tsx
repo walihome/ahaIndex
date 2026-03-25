@@ -23,7 +23,7 @@ export function Footer({ showArchiveBanner = false }: FooterProps) {
               Dive into our comprehensive database of past AI industry shifts.
             </div>
           </div>
-          <Link to="/daily" style={{ flexShrink: 0, display: 'inline-block', padding: '8px 16px', background: 'var(--ink)', color: 'var(--paper)', fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase', textDecoration: 'none', transition: 'opacity 0.2s' }}>
+          <Link onClick={() => window.scrollTo(0, 0)} to="/daily" style={{ flexShrink: 0, display: 'inline-block', padding: '8px 16px', background: 'var(--ink)', color: 'var(--paper)', fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase', textDecoration: 'none', transition: 'opacity 0.2s' }}>
             Browse History
           </Link>
         </div>
