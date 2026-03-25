@@ -142,7 +142,7 @@ export default function Archive() {
       <div className="month-grid">
         {Array.from({ length: 12 }, (_, i) => {
           const monthNum = 12 - i;
-          const monthData = months.find(m => m.month === monthNum);
+          const monthData = months.find(m => new Date(m.month).getUTCMonth() + 1 === monthNum);
           const isFuture = selectedYear === currentYear && monthNum > currentMonth;
           const isCurrent = selectedYear === currentYear && monthNum === currentMonth;
 
@@ -175,7 +175,7 @@ export default function Archive() {
               <div className="mc-label">{MONTH_NAMES[monthNum - 1]}</div>
               <div className="mc-score">{monthData.avg_aha_score.toFixed(1)}</div>
               <div className="mc-score-sub">Avg Aha Score</div>
-              <div className="mc-count">{monthData.total_items} Items</div>
+              <div className="mc-count">{monthData.item_count} Items</div>
               <div className="mc-bar">
                 <div className="f"></div>
                 <div className="f"></div>
@@ -190,24 +190,24 @@ export default function Archive() {
 
   const renderMonthDetail = () => {
     if (!selectedMonth) return null;
-    const monthData = months.find(m => m.month === selectedMonth);
+    const monthData = months.find(m => new Date(m.month).getUTCMonth() + 1 === selectedMonth);
 
     return (
       <div id={`${selectedYear}-${String(selectedMonth).padStart(2, '0')}`}>
         <div className="month-detail-header">
           <h2>{MONTH_NAMES[selectedMonth - 1]} {selectedYear}</h2>
-          <span className="cnt">{monthData?.total_items || 0} Items Recorded</span>
+          <span className="cnt">{monthData?.item_count || 0} Items Recorded</span>
           <Link to="/daily" className="lnk">Back to Overview ↑</Link>
         </div>
         
-        {monthData?.ai_summary && (
+        {monthData?.summary && (
           <div className="month-summary">
-            <strong>AI Summary:</strong> {monthData.ai_summary}
+            <strong>AI Summary:</strong> {monthData.summary}
           </div>
         )}
 
         {weeks.map(week => {
-          const weekDays = days.filter(d => d.archive_date >= week.start_date && d.archive_date <= week.end_date);
+          const weekDays = days.filter(d => d.snapshot_date >= week.start_date && d.snapshot_date <= week.end_date);
           
           return (
             <div key={week.week_number} className="week-section">
@@ -218,18 +218,18 @@ export default function Archive() {
               </div>
               
               {weekDays.map(day => {
-                const isToday = day.archive_date === new Date().toISOString().split('T')[0];
-                const isOpen = expandedDays.has(day.archive_date);
-                const items = dayItems[day.archive_date] || [];
-                const dateObj = new Date(day.archive_date);
+                const isToday = day.snapshot_date === new Date().toISOString().split('T')[0];
+                const isOpen = expandedDays.has(day.snapshot_date);
+                const items = dayItems[day.snapshot_date] || [];
+                const dateObj = new Date(day.snapshot_date);
                 const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dateObj.getDay()];
 
-                if (isToday && day.total_items === 0) {
+                if (isToday && day.item_count === 0) {
                   return (
-                    <div key={day.archive_date} className="day-block">
+                    <div key={day.snapshot_date} className="day-block">
                       <div className="day-head today-row">
                         <div className="dh-toggle"></div>
-                        <div className="dh-date">{day.archive_date.substring(5).replace('-', '.')}</div>
+                        <div className="dh-date">{day.snapshot_date.substring(5).replace('-', '.')}</div>
                         <div className="dh-weekday">{weekday}</div>
                         <div className="today-tag">TODAY</div>
                         <div className="pending">Compiling today's briefing...</div>
@@ -239,19 +239,19 @@ export default function Archive() {
                 }
 
                 return (
-                  <div key={day.archive_date} className="day-block">
-                    <div className="day-head" onClick={() => toggleDay(day.archive_date)}>
+                  <div key={day.snapshot_date} className="day-block">
+                    <div className="day-head" onClick={() => toggleDay(day.snapshot_date)}>
                       <div className={`dh-toggle ${isOpen ? 'open' : ''}`}>▶</div>
-                      <div className="dh-date">{day.archive_date.substring(5).replace('-', '.')}</div>
+                      <div className="dh-date">{day.snapshot_date.substring(5).replace('-', '.')}</div>
                       <div className="dh-weekday">{weekday}</div>
-                      <div className="dh-score">{day.max_aha_score.toFixed(1)}</div>
-                      <div className="dh-delta" style={{ color: 'var(--green)' }}></div>
-                      <div className="dh-top">{day.featured_title}</div>
-                      <div className="dh-count">{day.total_items} Items</div>
+                      <div className="dh-score">{day.aha_score.toFixed(1)}</div>
+                      <div className="dh-delta" style={{ color: 'var(--green)' }}>{day.aha_delta}</div>
+                      <div className="dh-top">{day.top_story_title}</div>
+                      <div className="dh-count">{day.item_count} Items</div>
                       <div className="dh-bar">
                         <div className="f"></div>
                         <div className="f"></div>
-                        <div className={day.max_aha_score > 90 ? 'fh' : ''}></div>
+                        <div className={day.aha_score > 90 ? 'fh' : ''}></div>
                       </div>
                     </div>
                     
@@ -269,7 +269,7 @@ export default function Archive() {
                           <a href={item.url} target="_blank" rel="noopener noreferrer" className="ir-link">Read Full Briefing →</a>
                         </div>
                       ))}
-                      <Link to={`/daily/${day.archive_date}`} className="ir-more">View all {day.total_items} items for this day →</Link>
+                      <Link to={`/daily/${day.snapshot_date}`} className="ir-more">View all {day.item_count} items for this day →</Link>
                     </div>
                   </div>
                 );

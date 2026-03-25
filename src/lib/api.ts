@@ -1,12 +1,14 @@
 import { supabase } from './supabase';
 
 export interface MonthlyArchive {
-  year: number;
-  month: number;
-  total_items: number;
+  month: string; // date type, e.g., 2026-03-01
+  edition_count: number;
+  item_count: number;
   avg_aha_score: number;
-  max_aha_score: number;
-  ai_summary: string;
+  peak_aha_score: number;
+  peak_date: string;
+  summary: string;
+  meta_description: string;
 }
 
 export interface WeeklyArchive {
@@ -14,17 +16,24 @@ export interface WeeklyArchive {
   week_number: number;
   start_date: string;
   end_date: string;
-  total_items: number;
+  edition_count: number;
+  item_count: number;
   avg_aha_score: number;
+  peak_aha_score: number;
+  peak_date: string;
 }
 
 export interface DailyArchive {
-  archive_date: string;
-  total_items: number;
-  featured_title: string;
-  featured_source: string;
-  avg_aha_score: number;
-  max_aha_score: number;
+  snapshot_date: string;
+  aha_score: number;
+  aha_delta: string;
+  item_count: number;
+  top_story_title: string;
+  top_story_source: string;
+  top_tags: string[];
+  rarity_score: number;
+  timeliness_score: number;
+  impact_score: number;
 }
 
 export interface DisplayItem {
@@ -47,15 +56,15 @@ export interface GlobalStats {
 
 export async function fetchStats(): Promise<GlobalStats> {
   try {
-    const { data: dailyData, error } = await supabase.from('daily_archives').select('archive_date, total_items, max_aha_score, avg_aha_score');
+    const { data: dailyData, error } = await supabase.from('daily_archives').select('snapshot_date, item_count, aha_score');
     if (error || !dailyData || dailyData.length === 0) {
       return { total_editions: 0, total_items: 0, avg_aha_score: 0, peak_aha_score: 0 };
     }
     
     const total_editions = dailyData.length;
-    const total_items = dailyData.reduce((sum, d) => sum + (d.total_items || 0), 0);
-    const avg_aha_score = dailyData.reduce((sum, d) => sum + (d.avg_aha_score || 0), 0) / total_editions;
-    const peak_aha_score = Math.max(...dailyData.map(d => d.max_aha_score || 0));
+    const total_items = dailyData.reduce((sum, d) => sum + (d.item_count || 0), 0);
+    const avg_aha_score = dailyData.reduce((sum, d) => sum + (d.aha_score || 0), 0) / total_editions;
+    const peak_aha_score = Math.max(...dailyData.map(d => d.aha_score || 0));
     return { total_editions, total_items, avg_aha_score, peak_aha_score };
   } catch (e) {
     return { total_editions: 0, total_items: 0, avg_aha_score: 0, peak_aha_score: 0 };
@@ -64,7 +73,14 @@ export async function fetchStats(): Promise<GlobalStats> {
 
 export async function fetchMonths(year: number): Promise<MonthlyArchive[]> {
   try {
-    const { data, error } = await supabase.from('monthly_archives').select('*').eq('year', year).order('month', { ascending: false });
+    const startDate = `${year}-01-01`;
+    const endDate = `${year}-12-31`;
+    const { data, error } = await supabase
+      .from('monthly_archives')
+      .select('*')
+      .gte('month', startDate)
+      .lte('month', endDate)
+      .order('month', { ascending: false });
     if (error || !data) return [];
     return data;
   } catch (e) {
@@ -97,9 +113,9 @@ export async function fetchDays(year: number, month: number): Promise<DailyArchi
     const { data, error } = await supabase
       .from('daily_archives')
       .select('*')
-      .gte('archive_date', startDate)
-      .lte('archive_date', endDate)
-      .order('archive_date', { ascending: false });
+      .gte('snapshot_date', startDate)
+      .lte('snapshot_date', endDate)
+      .order('snapshot_date', { ascending: false });
     if (error || !data) return [];
     return data;
   } catch (e) {

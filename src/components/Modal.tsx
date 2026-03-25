@@ -202,7 +202,7 @@ export function Modal({ item, onClose }: ModalProps) {
                 loading="lazy"
                 width="800"
                 height="400"
-                style={{ width: '100%', height: 'auto', aspectRatio: '2 / 1', objectFit: 'cover', borderRadius: '6px', border: '1px solid var(--border)' }}
+                style={{ width: '100%', height: 'auto', borderRadius: '6px', border: '1px solid var(--border)' }}
                 onError={() => setShowCover(false)}
               />
             </div>
@@ -228,7 +228,7 @@ export function Modal({ item, onClose }: ModalProps) {
                 loading="lazy"
                 width="800"
                 height="400"
-                style={{ width: '100%', height: 'auto', aspectRatio: '2 / 1', objectFit: 'cover', borderRadius: '6px', border: '1px solid var(--border)' }}
+                style={{ width: '100%', height: 'auto', borderRadius: '6px', border: '1px solid var(--border)' }}
                 onError={() => setShowStarHistory(false)}
               />
             </div>

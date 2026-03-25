@@ -87,7 +87,7 @@ export function Sidebar({ items = [] }: SidebarProps) {
                 if (!day) return <td key={j}></td>;
                 
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const hasEdition = days.some(d => d.archive_date === dateStr && d.total_items > 0);
+                const hasEdition = days.some(d => d.snapshot_date === dateStr && d.item_count > 0);
                 const isToday = day === today;
                 
                 let className = '';
