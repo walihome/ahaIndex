@@ -135,37 +135,8 @@ export function Sidebar({ items = [] }: SidebarProps) {
 
         <div className="divider"></div>
 
-        <div className="sidebar-dims">
-          <div className="sidebar-dim">
-            <span className="dim-label">稀缺性</span>
-            <span className="dim-val">{scarcity}</span>
-            <div className="dim-bar-container"><div className="dim-bar-fill" style={{width: `${scarcity}%`}}></div></div>
-          </div>
-          <div className="sidebar-dim">
-            <span className="dim-label">时效性</span>
-            <span className="dim-val">{timeliness}</span>
-            <div className="dim-bar-container"><div className="dim-bar-fill" style={{width: `${timeliness}%`}}></div></div>
-          </div>
-          <div className="sidebar-dim">
-            <span className="dim-label">影响力</span>
-            <span className="dim-val">{impact}</span>
-            <div className="dim-bar-container"><div className="dim-bar-fill" style={{width: `${impact}%`}}></div></div>
-          </div>
-        </div>
-
-        <div className="divider"></div>
-
-        <p className="about-text">
-          "AmazingIndex" 是一套基于多维度量化算法的评估系统，旨在发掘当下最具颠覆性与美学价值的创新成果。
-        </p>
-
-        <div className="version-info">
-          <span>Version 1.2.0</span>
-          <span style={{ textAlign: 'right' }}>© {new Date().getFullYear()} Index</span>
-        </div>
-
         {/* Archive Entry */}
-        <div className="sidebar-archive" style={{ marginTop: '40px' }}>
+        <div className="sidebar-archive">
           <div className="sidebar-archive-section">
             <div className="sidebar-archive-title">Archive</div>
             {renderMiniCalendar()}
@@ -174,6 +145,12 @@ export function Sidebar({ items = [] }: SidebarProps) {
             </Link>
           </div>
         </div>
+
+        <div className="divider"></div>
+
+        <p className="about-text">
+          "AmazingIndex" 是一套基于多维度量化算法的评估系统，旨在发掘当下最具颠覆性与美学价值的创新成果。
+        </p>
       </div>
     </aside>
   );
