@@ -197,7 +197,10 @@ export default function Archive() {
         <div className="month-detail-header">
           <h2>{MONTH_NAMES[selectedMonth - 1]} {selectedYear}</h2>
           <span className="cnt">{monthData?.item_count || 0} Items Recorded</span>
-          <Link to="/daily" className="lnk">Back to Overview ↑</Link>
+          <Link to="/daily" className="lnk" onClick={(e) => {
+            e.preventDefault();
+            navigate('/daily');
+          }}>Back to Overview ↑</Link>
         </div>
         
         {monthData?.summary && (
