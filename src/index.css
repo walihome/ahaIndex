@@ -525,16 +525,6 @@ body::before {
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
 }
 
 /* ─── FEATURED (FIRST ARTICLE) ─────────────────────── */
