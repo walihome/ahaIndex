@@ -6,7 +6,7 @@ import { BriefingCard } from './components/BriefingCard';
 import { Sidebar } from './components/Sidebar';
 import { Footer } from './components/Footer';
 import { Modal } from './components/Modal';
-import { ShareModal, useShareCard } from './components/ShareModal';
+import { ShareModal } from './components/ShareModal';
 import { ProcessedItem } from './types';
 
 const OSS_BASE = 'https://amazingindex.oss-cn-hangzhou.aliyuncs.com';
@@ -215,11 +215,11 @@ export default function App() {
     ? items 
     : items.filter(item => item.category === selectedCategory);
 
-  const { shareImage, setShareImage, generating, handleShare } = useShareCard(items);
+  const [showShare, setShowShare] = useState(false);
 
   return (
     <div>
-      <Masthead items={items} onShare={handleShare} generating={generating} />
+      <Masthead items={items} onShare={() => setShowShare(true)} generating={false} />
       <NavBar 
         categories={categories} 
         selectedCategory={selectedCategory} 
@@ -263,7 +263,7 @@ export default function App() {
         />
       )}
 
-      <ShareModal imageUrl={shareImage} onClose={() => setShareImage(null)} />
+      {showShare && <ShareModal items={items} onClose={() => setShowShare(false)} />}
     </div>
   );
 }
