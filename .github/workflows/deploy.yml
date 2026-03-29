@@ -1,0 +1,84 @@
+name: Build & Deploy to OSS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+      - 'index.html'
+      - 'package.json'
+      - 'vite.config.ts'
+  workflow_dispatch:  # 手动触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # prebuild: inject-data.js 从 OSS 拉最新数据注入 index.html
+      # build: vite build
+      # postbuild: prerender.js 生成文章静态页
+      - name: Build
+        run: npm run build
+
+      # 安装 ossutil
+      - name: Install ossutil
+        run: |
+          curl -o ossutil https://gosspublic.alicdn.com/ossutil/v2-beta/2.0.1-beta.11250100/ossutil-2.0.1-beta.11250100-linux-amd64
+          chmod +x ossutil
+          sudo mv ossutil /usr/local/bin/
+
+      # 同步 dist/ 到 OSS
+      # 注意：不要删除 api/ 目录（数据管线单独管理）
+      - name: Deploy to OSS
+        env:
+          OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+        run: |
+          # 配置 credentials
+          ossutil config \
+            --access-key-id "$OSS_ACCESS_KEY_ID" \
+            --access-key-secret "$OSS_ACCESS_KEY_SECRET" \
+            --endpoint oss-cn-hangzhou.aliyuncs.com
+
+          # 同步前端资源（排除 api/ 和 image/ 目录，这些由数据管线管理）
+          # HTML 文件：不缓存
+          ossutil sync ./dist/ oss://amazingindex/ \
+            --force \
+            --delete \
+            --exclude "api/*" \
+            --exclude "image/*" \
+            --exclude "sitemap.xml" \
+            --exclude "robots.txt"
+
+          # 单独上传 HTML 文件，设置 no-cache
+          find ./dist -name "*.html" | while read f; do
+            key="${f#./dist/}"
+            ossutil cp "$f" "oss://amazingindex/$key" \
+              --force \
+              --meta "Cache-Control:no-cache,Content-Type:text/html; charset=utf-8"
+          done
+
+          # JS/CSS 带 hash，长期缓存
+          if [ -d "./dist/assets" ]; then
+            ossutil sync ./dist/assets/ oss://amazingindex/assets/ \
+              --force \
+              --meta "Cache-Control:max-age=31536000,immutable"
+          fi
+
+      - name: Deployment summary
+        run: |
+          echo "✅ Deployed to OSS"
+          echo "HTML pages: $(find ./dist -name '*.html' | wc -l)"
+          echo "Asset files: $(find ./dist/assets -type f 2>/dev/null | wc -l)"
