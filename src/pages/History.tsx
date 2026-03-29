@@ -8,7 +8,6 @@ import { Sidebar } from '../components/Sidebar';
 import { Footer } from '../components/Footer';
 import { Modal } from '../components/Modal';
 import { ProcessedItem } from '../types';
-import { MOCK_DATA } from '../App';
 
 export default function History() {
   const navigate = useNavigate();
@@ -30,15 +29,15 @@ export default function History() {
 
         if (error) {
           console.error('Error fetching history items:', error);
-          setItems(MOCK_DATA);
+          setItems([]);
         } else if (data && data.length > 0) {
           setItems(data);
         } else {
-          setItems(MOCK_DATA);
+          setItems([]);
         }
       } catch (err) {
         console.error('Unexpected error:', err);
-        setItems(MOCK_DATA);
+        setItems([]);
       } finally {
         setLoading(false);
       }

@@ -18,7 +18,7 @@ import {
 } from '../lib/api';
 import './Archive.css';
 
-const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTH_NAMES = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
 
 export default function Archive() {
   const { dateOrMonth } = useParams<{ dateOrMonth?: string }>();
@@ -103,8 +103,8 @@ export default function Archive() {
               <div key={monthNum} className="month-cell future">
                 <div className="mc-label">{MONTH_NAMES[monthNum - 1]}</div>
                 <div className="mc-score">--</div>
-                <div className="mc-score-sub">Avg Aha Score</div>
-                <div className="mc-count">0 Items</div>
+                <div className="mc-score-sub">平均 Aha 指数</div>
+                <div className="mc-count">0 篇</div>
                 <div className="mc-bar"><div></div><div></div><div></div></div>
               </div>
             );
@@ -115,8 +115,8 @@ export default function Archive() {
               <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${selectedYear}-${String(monthNum).padStart(2, '0')}`} key={monthNum} className={`month-cell ${isCurrent ? 'current' : ''}`}>
                 <div className="mc-label">{MONTH_NAMES[monthNum - 1]}</div>
                 <div className="mc-score">--</div>
-                <div className="mc-score-sub">Avg Aha Score</div>
-                <div className="mc-count">0 Items</div>
+                <div className="mc-score-sub">平均 Aha 指数</div>
+                <div className="mc-count">0 篇</div>
                 <div className="mc-bar"><div></div><div></div><div></div></div>
               </Link>
             );
@@ -126,8 +126,8 @@ export default function Archive() {
             <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${selectedYear}-${String(monthNum).padStart(2, '0')}`} key={monthNum} className={`month-cell ${isCurrent ? 'current' : ''}`}>
               <div className="mc-label">{MONTH_NAMES[monthNum - 1]}</div>
               <div className="mc-score">{monthData.avg_aha_score.toFixed(1)}</div>
-              <div className="mc-score-sub">Avg Aha Score</div>
-              <div className="mc-count">{monthData.item_count} Items</div>
+              <div className="mc-score-sub">平均 Aha 指数</div>
+              <div className="mc-count">{monthData.item_count} 篇</div>
               <div className="mc-bar">
                 <div className="f"></div>
                 <div className="f"></div>
@@ -147,16 +147,16 @@ export default function Archive() {
     return (
       <div id={`${selectedYear}-${String(selectedMonth).padStart(2, '0')}`}>
         <div className="month-detail-header">
-          <h2>{MONTH_NAMES[selectedMonth - 1]} {selectedYear}</h2>
-          <span className="cnt">{monthData?.item_count || 0} Items Recorded</span>
+          <h2>{selectedYear}年{MONTH_NAMES[selectedMonth - 1]}</h2>
+          <span className="cnt">共收录 {monthData?.item_count || 0} 篇</span>
           <Link to="/daily" className="lnk" onClick={() => {
             window.scrollTo(0, 0);
-          }}>Back to Overview ↑</Link>
+          }}>返回概览 ↑</Link>
         </div>
         
         {monthData?.summary && (
           <div className="month-summary">
-            <strong>AI Summary:</strong> {monthData.summary}
+            <strong>AI 总结：</strong> {monthData.summary}
           </div>
         )}
 
@@ -166,9 +166,9 @@ export default function Archive() {
           return (
             <div key={week.week_number} className="week-section">
               <div className="week-header">
-                <h3>Week {week.week_number}</h3>
+                <h3>第 {week.week_number} 周</h3>
                 <span className="week-range">{week.start_date.substring(5).replace('-', '.')} - {week.end_date.substring(5).replace('-', '.')}</span>
-                <span className="week-stats">Avg Score: {week.avg_aha_score.toFixed(1)}</span>
+                <span className="week-stats">平均分: {week.avg_aha_score.toFixed(1)}</span>
               </div>
               
               {weekDays.map(day => {
@@ -176,7 +176,7 @@ export default function Archive() {
                 const isOpen = expandedDays.has(day.snapshot_date);
                 const items = dayItems[day.snapshot_date] || [];
                 const dateObj = new Date(day.snapshot_date);
-                const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dateObj.getDay()];
+                const weekday = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][dateObj.getDay()];
 
                 if (isToday && day.item_count === 0) {
                   return (
@@ -185,8 +185,8 @@ export default function Archive() {
                         <div className="dh-toggle"></div>
                         <div className="dh-date">{day.snapshot_date.substring(5).replace('-', '.')}</div>
                         <div className="dh-weekday">{weekday}</div>
-                        <div className="today-tag">TODAY</div>
-                        <div className="pending">Compiling today's briefing...</div>
+                        <div className="today-tag">今日</div>
+                        <div className="pending">正在编译今日简报...</div>
                       </div>
                     </div>
                   );
@@ -201,7 +201,7 @@ export default function Archive() {
                       <div className="dh-score">{day.aha_score.toFixed(1)}</div>
                       <div className="dh-delta" style={{ color: 'var(--green)' }}>{day.aha_delta}</div>
                       <div className="dh-top">{day.top_story_title}</div>
-                      <div className="dh-count">{day.item_count} Items</div>
+                      <div className="dh-count">{day.item_count} 篇</div>
                       <div className="dh-bar">
                         <div className="f"></div>
                         <div className="f"></div>
@@ -220,10 +220,10 @@ export default function Archive() {
                             ))}
                           </div>
                           <div className="ir-src">{item.source_name}</div>
-                          <a href={item.url} target="_blank" rel="noopener noreferrer" className="ir-link">Read Full Briefing →</a>
+                          <a href={item.url} target="_blank" rel="noopener noreferrer" className="ir-link">阅读全文 →</a>
                         </div>
                       ))}
-                      <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${day.snapshot_date}`} className="ir-more">View all {day.item_count} items for this day →</Link>
+                      <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${day.snapshot_date}`} className="ir-more">查看当日全部 {day.item_count} 篇简报 →</Link>
                     </div>
                   </div>
                 );
@@ -238,18 +238,18 @@ export default function Archive() {
   return (
     <div className="archive-page">
       <Helmet>
-        <title>{selectedMonth ? `Archive - ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} | AmazingIndex` : `Historical Archive | AmazingIndex`}</title>
-        <meta name="description" content={selectedMonth ? `Explore the AI industry shifts and breakthroughs in ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} on AmazingIndex.` : `Dive into the comprehensive database of past AI industry shifts, scored and categorized for easy discovery on AmazingIndex.`} />
+        <title>{selectedMonth ? `历史归档 - ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} | AmazingIndex` : `历史归档 | AmazingIndex`}</title>
+        <meta name="description" content={selectedMonth ? `在 AmazingIndex 探索 ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} 的 AI 行业动态与突破。` : `深入探索 AmazingIndex 过去 AI 行业动态的综合数据库，经过评分和分类，方便您发现。`} />
         <link rel="canonical" href={selectedMonth ? `https://amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://amazingindex.com/daily`} />
-        <meta property="og:title" content={selectedMonth ? `Archive - ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} | AmazingIndex` : `Historical Archive | AmazingIndex`} />
-        <meta property="og:description" content={selectedMonth ? `Explore the AI industry shifts and breakthroughs in ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} on AmazingIndex.` : `Dive into the comprehensive database of past AI industry shifts, scored and categorized for easy discovery on AmazingIndex.`} />
+        <meta property="og:title" content={selectedMonth ? `历史归档 - ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} | AmazingIndex` : `历史归档 | AmazingIndex`} />
+        <meta property="og:description" content={selectedMonth ? `在 AmazingIndex 探索 ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} 的 AI 行业动态与突破。` : `深入探索 AmazingIndex 过去 AI 行业动态的综合数据库，经过评分和分类，方便您发现。`} />
         <meta property="og:url" content={selectedMonth ? `https://amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://amazingindex.com/daily`} />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            "name": selectedMonth ? `Archive - ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} | AmazingIndex` : `Historical Archive | AmazingIndex`,
-            "description": selectedMonth ? `Explore the AI industry shifts and breakthroughs in ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} on AmazingIndex.` : `Dive into the comprehensive database of past AI industry shifts, scored and categorized for easy discovery on AmazingIndex.`,
+            "name": selectedMonth ? `历史归档 - ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} | AmazingIndex` : `历史归档 | AmazingIndex`,
+            "description": selectedMonth ? `在 AmazingIndex 探索 ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} 的 AI 行业动态与突破。` : `深入探索 AmazingIndex 过去 AI 行业动态的综合数据库，经过评分和分类，方便您发现。`,
             "url": selectedMonth ? `https://amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://amazingindex.com/daily`
           })}
         </script>
@@ -260,12 +260,12 @@ export default function Archive() {
       <div className="layout">
         <div className="main-col">
           <div className="breadcrumb">
-            <Link onClick={() => window.scrollTo(0, 0)} to="/">Home</Link><span className="sep">/</span>Archive
+            <Link onClick={() => window.scrollTo(0, 0)} to="/">首页</Link><span className="sep">/</span>历史归档
           </div>
           
           <div className="page-header">
-            <h1>Historical Archive</h1>
-            <div className="sub">The complete record of AI industry shifts</div>
+            <h1>历史归档</h1>
+            <div className="sub">AI 行业动态的完整记录</div>
           </div>
 
           <div className="year-tabs">
@@ -282,7 +282,7 @@ export default function Archive() {
 
           {!selectedMonth && (
             <>
-              <div className="year-meta">{selectedYear} Overview</div>
+              <div className="year-meta">{selectedYear} 年度概览</div>
               {renderMonthGrid()}
             </>
           )}
@@ -298,29 +298,29 @@ export default function Archive() {
 
         <div className="side-col">
           <div className="side-section">
-            <div className="side-title">Global Stats</div>
+            <div className="side-title">全局统计</div>
             <div className="side-stats">
               <div className="side-stat">
-                <span className="ss-label">Total Editions</span>
+                <span className="ss-label">总期数</span>
                 <span className="ss-val">{stats?.total_editions || 0}</span>
               </div>
               <div className="side-stat">
-                <span className="ss-label">Items Processed</span>
+                <span className="ss-label">收录文章</span>
                 <span className="ss-val">{stats?.total_items?.toLocaleString() || 0}</span>
               </div>
               <div className="side-stat">
-                <span className="ss-label">All-time Avg Score</span>
+                <span className="ss-label">历史平均分</span>
                 <span className="ss-val">{stats?.avg_aha_score?.toFixed(1) || '0.0'}</span>
               </div>
               <div className="side-stat">
-                <span className="ss-label">Peak Score</span>
+                <span className="ss-label">最高得分</span>
                 <span className="ss-val" style={{ color: 'var(--accent)' }}>{stats?.peak_aha_score?.toFixed(1) || '0.0'}</span>
               </div>
             </div>
           </div>
 
           <div className="side-section">
-            <div className="side-title">Score Distribution</div>
+            <div className="side-title">分数分布</div>
             <div className="sb-row">
               <div className="sb-label">90-100</div>
               <div className="sb-track"><div className="sb-fill high" style={{ width: '15%' }}></div></div>
@@ -344,7 +344,7 @@ export default function Archive() {
           </div>
 
           <div className="side-section">
-            <div className="side-title">Top Editions</div>
+            <div className="side-title">热门简报</div>
             <div className="te-row">
               <div className="te-date">02.14</div>
               <div className="te-story">Gemini 1.5 Pro Context Window Expansion</div>
@@ -358,16 +358,16 @@ export default function Archive() {
           </div>
 
           <div className="side-section">
-            <div className="side-title">About Archive</div>
+            <div className="side-title">关于归档</div>
             <div className="about-box">
-              The AmazingIndex archive preserves the daily evolution of the AI industry. 
-              Each edition is a snapshot of the most impactful news, scored by our <strong>Aha Index</strong> algorithm to highlight true breakthroughs over noise.
+              AmazingIndex 历史归档保存了 AI 行业的每日演进。
+              每一期都是最具影响力新闻的快照，由我们的 <strong>Aha Index</strong> 算法进行评分，以在噪音中凸显真正的突破。
             </div>
           </div>
           
           <div className="side-footer">
             <span>AmazingIndex</span>
-            <span>Est. 2024</span>
+            <span>始于 2024</span>
           </div>
         </div>
       </div>
