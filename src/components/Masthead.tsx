@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Share } from 'lucide-react';
 import { ProcessedItem } from '../types';
 
@@ -10,10 +11,13 @@ interface MastheadProps {
 
 export function Masthead({ items = [], onShare, generating }: MastheadProps) {
   const [showTooltip, setShowTooltip] = useState(false);
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = (now.getMonth() + 1).toString().padStart(2, '0');
-  const day = now.getDate().toString().padStart(2, '0');
+  const displayDate = items.length > 0 && items[0].snapshot_date 
+    ? new Date(items[0].snapshot_date) 
+    : new Date();
+  
+  const year = displayDate.getFullYear();
+  const month = (displayDate.getMonth() + 1).toString().padStart(2, '0');
+  const day = displayDate.getDate().toString().padStart(2, '0');
 
   useEffect(() => {
     const handleClick = () => setShowTooltip(false);
@@ -52,12 +56,12 @@ export function Masthead({ items = [], onShare, generating }: MastheadProps) {
     <header className="masthead">
       <div className="masthead-inner">
         <div className="masthead-logo">
-          <div className="logo">
+          <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
             <svg className="logo-icon" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ stroke: 'rgba(28,26,23,0.5)' }}>
               <polyline points="1,17 8,7 14,12 20,3 25,6" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
             </svg>
             <span className="logo-text">Amazing<span>Index</span></span>
-          </div>
+          </Link>
         </div>
 
         <div className="masthead-title">
@@ -111,7 +115,7 @@ export function Masthead({ items = [], onShare, generating }: MastheadProps) {
             </div>
           </div>
           <div className="masthead-vol">
-            VOL. {now.getMonth() + 1}<br/>
+            VOL. {displayDate.getMonth() + 1}<br/>
             {year}.{month}.{day}
           </div>
         </div>

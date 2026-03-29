@@ -141,7 +141,8 @@ export default function App() {
 
         if (!targetDate) {
           if (PRELOADED) {
-            navigate(`/daily/${PRELOADED.snapshot_date}`, { replace: true });
+            setItems(PRELOADED.items);
+            setLoading(false);
             return;
           }
           try {
@@ -153,14 +154,12 @@ export default function App() {
             console.warn('Failed to fetch latest.json, falling back to mock data date.');
             targetDate = MOCK_DATA[0].snapshot_date;
           }
-          navigate(`/daily/${targetDate}`, { replace: true });
-          return; // The navigation will trigger a re-render with the new date
-        }
-
-        if (PRELOADED && targetDate === PRELOADED.snapshot_date) {
-          setItems(PRELOADED.items);
-          setLoading(false);
-          return;
+        } else {
+          if (PRELOADED && targetDate === PRELOADED.snapshot_date) {
+            setItems(PRELOADED.items);
+            setLoading(false);
+            return;
+          }
         }
 
         setLoading(true);
@@ -254,7 +253,7 @@ export default function App() {
         <Sidebar items={items} />
       </div>
 
-      <Footer showArchiveBanner={true} />
+      <Footer showArchiveBanner={true} date={items.length > 0 ? items[0].snapshot_date : undefined} />
 
       {selectedItem && (
         <Modal 
