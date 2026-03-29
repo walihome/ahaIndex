@@ -24,6 +24,10 @@ export function Modal({ item, onClose }: ModalProps) {
     const originalRight = originalStyle.right;
     const originalWidth = originalStyle.width;
     const originalOverflow = originalStyle.overflow;
+    const originalPaddingRight = originalStyle.paddingRight;
+
+    // Calculate scrollbar width to prevent layout shift
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
     // Apply fixed positioning to lock body completely (fixes iOS Safari bypass)
     document.body.style.position = 'fixed';
@@ -32,6 +36,9 @@ export function Modal({ item, onClose }: ModalProps) {
     document.body.style.right = '0';
     document.body.style.width = '100%';
     document.body.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
 
     // Prevent touchmove on non-scrollable areas (backdrop, header, footer)
     const handleTouchMove = (e: TouchEvent) => {
@@ -73,6 +80,7 @@ export function Modal({ item, onClose }: ModalProps) {
       document.body.style.right = originalRight;
       document.body.style.width = originalWidth;
       document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
       
       // Restore scroll position instantly
       window.scrollTo(0, scrollY);
