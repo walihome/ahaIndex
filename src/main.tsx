@@ -28,8 +28,7 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/daily" element={<Archive />} />
-          <Route path="/daily/:dateOrMonth" element={<AppOrArchive />} />
-          <Route path="/daily/:dateOrMonth/article/:itemId" element={<App />} />
+          <Route path="/daily/:dateOrMonth/*" element={<AppOrArchive />} />
           <Route path="/history" element={<History />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Masthead } from './components/Masthead';
 import { NavBar } from './components/NavBar';
@@ -24,7 +24,10 @@ declare global {
 const PRELOADED = window.__PRELOADED_DATA__;
 
 export default function App() {
-  const { dateOrMonth: date, itemId } = useParams<{ dateOrMonth: string; itemId: string }>();
+  const { dateOrMonth: date } = useParams<{ dateOrMonth: string }>();
+  const location = useLocation();
+  const itemIdMatch = location.pathname.match(/\/article\/([^/]+)$/);
+  const itemId = itemIdMatch ? itemIdMatch[1] : undefined;
   const navigate = useNavigate();
   const [items, setItems] = useState<ProcessedItem[]>(PRELOADED?.items || []);
   const [loading, setLoading] = useState(!PRELOADED);
@@ -114,11 +117,16 @@ export default function App() {
   }, [loading]);
 
   useEffect(() => {
-    if (itemId && items.length > 0) {
-      const target = items.find(i => i.processed_item_id === itemId);
-      if (target) setSelectedItem(target);
+    if (itemId) {
+      if (items.length > 0) {
+        const target = items.find(i => i.processed_item_id === itemId);
+        if (target) setSelectedItem(target);
+      }
+    } else if (date) {
+      // Only clear if we are on a daily page where URL tracks modal state
+      setSelectedItem(null);
     }
-  }, [itemId, items]);
+  }, [itemId, items, date]);
 
   const handleItemClick = (item: ProcessedItem) => {
     setSelectedItem(item);
@@ -145,14 +153,23 @@ export default function App() {
   return (
     <div>
       <Helmet>
-        {selectedItem && itemId ? (
+        {selectedItem ? (
           <>
             <title>{selectedItem.processed_title} - AmazingIndex</title>
             <meta name="description" content={selectedItem.summary?.slice(0, 150)} />
-            <link rel="canonical" href={`https://www.amazingindex.com/daily/${date}/article/${itemId}`} />
+            {itemId && date ? (
+              <>
+                <link rel="canonical" href={`https://www.amazingindex.com/daily/${date}/article/${itemId}`} />
+                <meta property="og:url" content={`https://www.amazingindex.com/daily/${date}/article/${itemId}`} />
+              </>
+            ) : (
+              <>
+                <link rel="canonical" href="https://www.amazingindex.com" />
+                <meta property="og:url" content="https://www.amazingindex.com" />
+              </>
+            )}
             <meta property="og:title" content={selectedItem.processed_title} />
             <meta property="og:description" content={selectedItem.summary?.slice(0, 150)} />
-            <meta property="og:url" content={`https://www.amazingindex.com/daily/${date}/article/${itemId}`} />
           </>
         ) : date ? (
           <>
