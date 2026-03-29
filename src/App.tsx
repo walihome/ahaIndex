@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Masthead } from './components/Masthead';
 import { NavBar } from './components/NavBar';
 import { BriefingCard } from './components/BriefingCard';
@@ -218,6 +219,36 @@ export default function App() {
 
   return (
     <div>
+      <Helmet>
+        {date ? (
+          <>
+            <title>AmazingIndex · {date} AI 行业精选简报</title>
+            <meta name="description" content={`AmazingIndex ${date} 每日 AI 行业精选简报。基于多维度量化算法，为您筛选当日最具价值的 AI 行业动态与创新洞察。`} />
+            <link rel="canonical" href={`https://amazingindex.com/daily/${date}`} />
+            <meta property="og:title" content={`AmazingIndex · ${date} AI 行业精选简报`} />
+            <meta property="og:description" content={`AmazingIndex ${date} 每日 AI 行业精选简报。基于多维度量化算法，为您筛选当日最具价值的 AI 行业动态与创新洞察。`} />
+            <meta property="og:url" content={`https://amazingindex.com/daily/${date}`} />
+            <script type="application/ld+json">
+              {JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "CollectionPage",
+                "name": `AmazingIndex · ${date} AI 行业精选简报`,
+                "description": `AmazingIndex ${date} 每日 AI 行业精选简报。基于多维度量化算法，为您筛选当日最具价值的 AI 行业动态与创新洞察。`,
+                "url": `https://amazingindex.com/daily/${date}`
+              })}
+            </script>
+          </>
+        ) : (
+          <>
+            <title>AmazingIndex · 每日 AI 行业精选简报</title>
+            <meta name="description" content="AmazingIndex 基于多维度量化算法，每日从数十个来源精选最值得关注的 AI 行业动态，过滤噪音，直达洞察。" />
+            <link rel="canonical" href="https://amazingindex.com/" />
+            <meta property="og:title" content="AmazingIndex · 每日 AI 行业精选简报" />
+            <meta property="og:description" content="基于多维度量化算法，每日精选最值得关注的 AI 行业动态。" />
+            <meta property="og:url" content="https://amazingindex.com/" />
+          </>
+        )}
+      </Helmet>
       <Masthead items={items} onShare={() => setShowShare(true)} generating={false} />
       <NavBar 
         categories={categories} 

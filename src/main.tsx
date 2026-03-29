@@ -1,6 +1,7 @@
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import App from './App.tsx';
 import Archive from './pages/Archive.tsx';
 import History from './pages/History.tsx';
@@ -22,17 +23,19 @@ function AppOrArchive() {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/daily" element={<Archive />} />
-        <Route path="/daily/:dateOrMonth" element={<AppOrArchive />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/terms" element={<Terms />} />
-      </Routes>
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/daily" element={<Archive />} />
+          <Route path="/daily/:dateOrMonth" element={<AppOrArchive />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   </StrictMode>,
 );

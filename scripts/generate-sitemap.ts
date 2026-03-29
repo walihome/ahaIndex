@@ -9,7 +9,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY!
 );
 
-const SITE_URL = 'https://ahaindex.com'; // 根据实际域名修改
+const SITE_URL = 'https://amazingindex.com'; // 根据实际域名修改
 
 async function generate() {
   const { data, error } = await supabase

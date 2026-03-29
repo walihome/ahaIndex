@@ -1,11 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Masthead } from '../components/Masthead';
 import { Footer } from '../components/Footer';
 
 export function Privacy() {
   return (
     <div>
+      <Helmet>
+        <title>隐私政策 · AmazingIndex</title>
+        <meta name="description" content="AmazingIndex 隐私政策：了解我们如何收集、使用和保护您的数据，以及 Google AdSense Cookie 的使用说明。" />
+        <link rel="canonical" href="https://amazingindex.com/privacy" />
+        <meta name="robots" content="noindex, follow" />
+        <meta property="og:title" content="隐私政策 · AmazingIndex" />
+        <meta property="og:url" content="https://amazingindex.com/privacy" />
+      </Helmet>
       <Masthead />
       <div className="page-hero">
         <div style={{ marginBottom: '24px' }}>

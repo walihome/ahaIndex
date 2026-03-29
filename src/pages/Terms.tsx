@@ -1,11 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Masthead } from '../components/Masthead';
 import { Footer } from '../components/Footer';
 
 export function Terms() {
   return (
     <div>
+      <Helmet>
+        <title>服务条款 · AmazingIndex</title>
+        <meta name="description" content="AmazingIndex 服务条款：使用本网站前请阅读内容版权、免责声明及用户行为规范。" />
+        <link rel="canonical" href="https://amazingindex.com/terms" />
+        <meta name="robots" content="noindex, follow" />
+        <meta property="og:title" content="服务条款 · AmazingIndex" />
+        <meta property="og:url" content="https://amazingindex.com/terms" />
+      </Helmet>
       <Masthead />
       <div className="page-hero">
         <div style={{ marginBottom: '24px' }}>

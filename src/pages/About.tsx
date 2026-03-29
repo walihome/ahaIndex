@@ -1,11 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Masthead } from '../components/Masthead';
 import { Footer } from '../components/Footer';
 
 export function About() {
   return (
     <div>
+      <Helmet>
+        <title>关于我们 · AmazingIndex</title>
+        <meta name="description" content="AmazingIndex 是一套基于多维度量化算法的 AI 内容评估系统，旨在发掘当下最具颠覆性与美学价值的创新成果。" />
+        <link rel="canonical" href="https://amazingindex.com/about" />
+        <meta property="og:title" content="关于我们 · AmazingIndex" />
+        <meta property="og:description" content="了解 AmazingIndex 的产品理念与内容筛选方法论。" />
+        <meta property="og:url" content="https://amazingindex.com/about" />
+      </Helmet>
       <Masthead />
       <div className="page-hero">
         <div style={{ marginBottom: '24px' }}>

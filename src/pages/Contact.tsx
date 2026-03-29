@@ -1,11 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Masthead } from '../components/Masthead';
 import { Footer } from '../components/Footer';
 
 export function Contact() {
   return (
     <div>
+      <Helmet>
+        <title>联系方式 · AmazingIndex</title>
+        <meta name="description" content="与 AmazingIndex 团队联系，发送内容建议、合作咨询或任何反馈至 hi@amazingindex.com。" />
+        <link rel="canonical" href="https://amazingindex.com/contact" />
+        <meta property="og:title" content="联系方式 · AmazingIndex" />
+        <meta property="og:url" content="https://amazingindex.com/contact" />
+      </Helmet>
       <Masthead />
       <div className="page-hero">
         <div style={{ marginBottom: '24px' }}>

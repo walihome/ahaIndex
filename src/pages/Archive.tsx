@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Masthead } from '../components/Masthead';
 import { NavBar } from '../components/NavBar';
 import { Footer } from '../components/Footer';
@@ -48,50 +49,6 @@ export default function Archive() {
       const [y, m] = dateOrMonth.split('-');
       year = parseInt(y, 10);
       month = parseInt(m, 10);
-      
-      document.title = `Archive - ${MONTH_NAMES[month - 1]} ${year} | AmazingIndex`;
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', `Explore the AI industry shifts and breakthroughs in ${MONTH_NAMES[month - 1]} ${year} on AmazingIndex.`);
-      }
-      
-      const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "CollectionPage",
-        "name": `Archive - ${MONTH_NAMES[month - 1]} ${year} | AmazingIndex`,
-        "description": `Explore the AI industry shifts and breakthroughs in ${MONTH_NAMES[month - 1]} ${year} on AmazingIndex.`,
-        "url": `https://amazingindex.com/daily/${year}-${String(month).padStart(2, '0')}`
-      };
-      let script = document.getElementById('json-ld-archive');
-      if (!script) {
-        script = document.createElement('script');
-        script.id = 'json-ld-archive';
-        script.setAttribute('type', 'application/ld+json');
-        document.head.appendChild(script);
-      }
-      script.textContent = JSON.stringify(jsonLd);
-    } else {
-      document.title = `Historical Archive | AmazingIndex`;
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', `Dive into the comprehensive database of past AI industry shifts, scored and categorized for easy discovery on AmazingIndex.`);
-      }
-      
-      const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "CollectionPage",
-        "name": `Historical Archive | AmazingIndex`,
-        "description": `Dive into the comprehensive database of past AI industry shifts, scored and categorized for easy discovery on AmazingIndex.`,
-        "url": `https://amazingindex.com/daily`
-      };
-      let script = document.getElementById('json-ld-archive');
-      if (!script) {
-        script = document.createElement('script');
-        script.id = 'json-ld-archive';
-        script.setAttribute('type', 'application/ld+json');
-        document.head.appendChild(script);
-      }
-      script.textContent = JSON.stringify(jsonLd);
     }
 
     setSelectedYear(year);
@@ -106,12 +63,6 @@ export default function Archive() {
       setWeeks([]);
       setDays([]);
     }
-    return () => {
-      const script = document.getElementById('json-ld-archive');
-      if (script) {
-        script.remove();
-      }
-    };
   }, [dateOrMonth]);
 
   const handleYearClick = (year: number) => {
@@ -286,6 +237,23 @@ export default function Archive() {
 
   return (
     <div className="archive-page">
+      <Helmet>
+        <title>{selectedMonth ? `Archive - ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} | AmazingIndex` : `Historical Archive | AmazingIndex`}</title>
+        <meta name="description" content={selectedMonth ? `Explore the AI industry shifts and breakthroughs in ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} on AmazingIndex.` : `Dive into the comprehensive database of past AI industry shifts, scored and categorized for easy discovery on AmazingIndex.`} />
+        <link rel="canonical" href={selectedMonth ? `https://amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://amazingindex.com/daily`} />
+        <meta property="og:title" content={selectedMonth ? `Archive - ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} | AmazingIndex` : `Historical Archive | AmazingIndex`} />
+        <meta property="og:description" content={selectedMonth ? `Explore the AI industry shifts and breakthroughs in ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} on AmazingIndex.` : `Dive into the comprehensive database of past AI industry shifts, scored and categorized for easy discovery on AmazingIndex.`} />
+        <meta property="og:url" content={selectedMonth ? `https://amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://amazingindex.com/daily`} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": selectedMonth ? `Archive - ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} | AmazingIndex` : `Historical Archive | AmazingIndex`,
+            "description": selectedMonth ? `Explore the AI industry shifts and breakthroughs in ${MONTH_NAMES[selectedMonth - 1]} ${selectedYear} on AmazingIndex.` : `Dive into the comprehensive database of past AI industry shifts, scored and categorized for easy discovery on AmazingIndex.`,
+            "url": selectedMonth ? `https://amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://amazingindex.com/daily`
+          })}
+        </script>
+      </Helmet>
       <Masthead />
       <NavBar />
       
