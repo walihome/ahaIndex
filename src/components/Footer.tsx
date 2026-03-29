@@ -31,7 +31,7 @@ export function Footer({ showArchiveBanner = false, date }: FooterProps) {
       )}
       <div style={{
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         flexWrap: 'wrap',
         gap: '24px',
         padding: '32px 32px 0',
