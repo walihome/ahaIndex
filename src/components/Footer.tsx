@@ -48,6 +48,7 @@ export function Footer({ showArchiveBanner = false, date }: FooterProps) {
       <div className="footer-inner">
         <span>© {today.getFullYear()} AmazingIndex · The Absolute Threshold</span>
         <span>Vol. {today.getMonth() + 1} · Issue {dateStr}</span>
+        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>浙ICP备2022023772号</a>
         <span>版权所有 · All rights reserved</span>
       </div>
     </footer>
