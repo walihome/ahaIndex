@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.resolve(__dirname, '../dist');
-const OSS_BASE = 'https://amazingindex.oss-cn-hangzhou.aliyuncs.com';
+const OSS_BASE = 'https://www.amazingindex.com';
 const SITE_URL = 'https://www.amazingindex.com';
 
 function escapeHtml(str) {

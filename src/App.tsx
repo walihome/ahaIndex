@@ -10,7 +10,7 @@ import { Modal } from './components/Modal';
 import { ShareModal } from './components/ShareModal';
 import { ProcessedItem } from './types';
 
-const OSS_BASE = 'https://amazingindex.oss-cn-hangzhou.aliyuncs.com';
+const OSS_BASE = '';
 
 declare global {
   interface Window {
@@ -129,16 +129,18 @@ export default function App() {
   }, [itemId, items, date]);
 
   const handleItemClick = (item: ProcessedItem) => {
-    setSelectedItem(item);
     if (date) {
       navigate(`/daily/${date}/article/${item.processed_item_id}`, { replace: false });
+    } else {
+      setSelectedItem(item);
     }
   };
 
   const handleCloseModal = () => {
-    setSelectedItem(null);
     if (date && itemId) {
       navigate(`/daily/${date}`, { replace: false });
+    } else {
+      setSelectedItem(null);
     }
   };
 

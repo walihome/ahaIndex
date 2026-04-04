@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const OSS_URL = 'https://amazingindex.oss-cn-hangzhou.aliyuncs.com/api/latest.json';
+const OSS_URL = 'https://www.amazingindex.com/api/latest.json';
 const INDEX_HTML_PATH = path.resolve(__dirname, '../index.html');
 
 async function injectData() {

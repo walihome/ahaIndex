@@ -45,21 +45,7 @@ export function useTracking() {
     
     console.log(`Tracking: Sending ${event_type}...`, { item_id, user_id });
 
-    // Fire and forget - 写入正式表 user_events
-    import('../lib/supabase').then(({ supabase }) => {
-      supabase.from('user_events').insert([{
-        item_id,
-        snapshot_date,
-        user_id,
-        event_type
-      }]).then(({ error }) => {
-        if (error) {
-          console.error(`Tracking Error (${event_type}):`, error.message);
-        } else {
-          console.log(`Tracking Success: ${event_type} recorded.`);
-        }
-      });
-    });
+    // Supabase removed
   }, []);
 
   return { trackEvent };
@@ -88,16 +74,8 @@ export function useImpression(item_id: string, snapshot_date: string) {
           if (user_id && !trackedImpressions.has(trackingKey)) {
             trackedImpressions.add(trackingKey);
             
-            import('../lib/supabase').then(({ supabase }) => {
-              supabase.from('user_events').insert([{
-                item_id,
-                snapshot_date,
-                user_id,
-                event_type: 'impression'
-              }]).then(({ error }) => {
-                if (error) console.warn('Silent fail: Impression tracking error', error.message);
-              });
-            });
+            // Supabase removed
+            console.log(`Tracking: Impression recorded for ${item_id}`);
           }
           observer.disconnect();
         }, 1000);

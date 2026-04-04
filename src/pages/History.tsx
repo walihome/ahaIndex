@@ -9,6 +9,8 @@ import { Footer } from '../components/Footer';
 import { Modal } from '../components/Modal';
 import { ProcessedItem } from '../types';
 
+const OSS_BASE = '';
+
 export default function History() {
   const navigate = useNavigate();
   const [items, setItems] = useState<ProcessedItem[]>([]);
@@ -19,22 +21,39 @@ export default function History() {
   useEffect(() => {
     async function fetchHistoryItems() {
       try {
-        const { supabase } = await import('../lib/supabase');
-        const { data, error } = await supabase
-          .from('display_items')
-          .select('*')
-          .order('snapshot_date', { ascending: false })
-          .order('rank', { ascending: true })
-          .limit(100);
-
-        if (error) {
-          console.error('Error fetching history items:', error);
+        const resp = await fetch(`${OSS_BASE}/api/dates.json`);
+        const { dates } = await resp.json();
+        
+        if (!dates || dates.length === 0) {
           setItems([]);
-        } else if (data && data.length > 0) {
-          setItems(data);
-        } else {
-          setItems([]);
+          setLoading(false);
+          return;
         }
+
+        // Fetch the latest 5 days to get enough items for history
+        const latestDates = dates.slice(0, 5);
+        const promises = latestDates.map(async (date: string) => {
+          const year = date.slice(0, 4);
+          const month = date.slice(5, 7);
+          const res = await fetch(`${OSS_BASE}/api/daily/${year}/${month}/${date}.json`);
+          if (res.ok) {
+            const data = await res.json();
+            return data.items || [];
+          }
+          return [];
+        });
+
+        const results = await Promise.all(promises);
+        let allItems: ProcessedItem[] = [];
+        results.forEach(dayItems => {
+          allItems = allItems.concat(dayItems);
+        });
+
+        // Sort by aha_index descending
+        allItems.sort((a, b) => ((b.aha_index || 0) - (a.aha_index || 0)));
+        
+        // Limit to top 100
+        setItems(allItems.slice(0, 100));
       } catch (err) {
         console.error('Unexpected error:', err);
         setItems([]);

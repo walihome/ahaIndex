@@ -6,7 +6,7 @@ from datetime import datetime
 import oss2
 
 # Configuration
-SITE_URL = 'https://amazingindex.com'
+SITE_URL = 'https://www.amazingindex.com'
 OSS_BUCKET_NAME = os.environ.get('OSS_BUCKET', 'amazingindex')
 OSS_ENDPOINT = os.environ.get('OSS_ENDPOINT', 'oss-cn-hangzhou.aliyuncs.com')
 OSS_ACCESS_KEY_ID = os.environ.get('OSS_ACCESS_KEY_ID')
