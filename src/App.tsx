@@ -157,7 +157,7 @@ export default function App() {
       <Helmet>
         {selectedItem ? (
           <>
-            <title>{selectedItem.processed_title} - AmazingIndex</title>
+            <title>{selectedItem.processed_title || selectedItem.title || '无标题'} - AmazingIndex</title>
             <meta name="description" content={selectedItem.summary?.slice(0, 150)} />
             {itemId && date ? (
               <>
@@ -170,7 +170,7 @@ export default function App() {
                 <meta property="og:url" content="https://www.amazingindex.com" />
               </>
             )}
-            <meta property="og:title" content={selectedItem.processed_title} />
+            <meta property="og:title" content={selectedItem.processed_title || selectedItem.title || '无标题'} />
             <meta property="og:description" content={selectedItem.summary?.slice(0, 150)} />
           </>
         ) : date ? (

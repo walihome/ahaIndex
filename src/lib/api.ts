@@ -9,6 +9,7 @@ export interface MonthlyArchive {
   peak_date: string;
   summary: string;
   meta_description: string;
+  top_story_title?: string;
 }
 
 export interface WeeklyArchive {
@@ -41,9 +42,11 @@ export interface DisplayItem {
   processed_item_id: string;
   snapshot_date: string;
   source_name: string;
-  title: string;
-  url: string;
-  aha_index_score: number;
+  title?: string;
+  processed_title?: string;
+  url?: string;
+  original_url?: string;
+  aha_index_score?: number;
   tags: string[];
   category?: string;
   aha_index?: number;
@@ -138,6 +141,8 @@ export async function fetchMonths(year: number): Promise<MonthlyArchive[]> {
       let peak_aha_score = 0;
       let peak_date = '';
       
+      let top_item: DisplayItem | null = null;
+      
       daysData.forEach(d => {
         item_count += d.items.length;
         const dayScore = d.items.length > 0 ? d.items.reduce((sum, item) => sum + (item.aha_index_score || item.aha_index || 0), 0) / d.items.length : 0;
@@ -146,9 +151,17 @@ export async function fetchMonths(year: number): Promise<MonthlyArchive[]> {
           peak_aha_score = dayScore;
           peak_date = d.snapshot_date;
         }
+        
+        // Find the top item of the month
+        d.items.forEach(item => {
+          if (!top_item || (item.aha_index_score || item.aha_index || 0) > (top_item.aha_index_score || top_item.aha_index || 0)) {
+            top_item = item;
+          }
+        });
       });
       
       const avg_aha_score = daysData.length > 0 ? total_score / daysData.length : 0;
+      const top_story_title = top_item ? (top_item.processed_title || top_item.title || '') : '';
       
       result.push({
         month: `${monthStr}-01`,
@@ -158,7 +171,8 @@ export async function fetchMonths(year: number): Promise<MonthlyArchive[]> {
         peak_aha_score,
         peak_date,
         summary: '',
-        meta_description: ''
+        meta_description: '',
+        top_story_title
       });
     }
     
@@ -258,7 +272,7 @@ export async function fetchDays(year: number, month: number): Promise<DailyArchi
         aha_score: dayScore,
         aha_delta: '+0.0', // Not easily calculated without previous day, mock for now
         item_count: d.items.length,
-        top_story_title: topItem ? topItem.title : '',
+        top_story_title: topItem ? (topItem.processed_title || topItem.title || '') : '',
         top_story_source: topItem ? topItem.source_name : '',
         top_tags: topItem && topItem.tags ? topItem.tags.slice(0, 3) : [],
         rarity_score: 0,

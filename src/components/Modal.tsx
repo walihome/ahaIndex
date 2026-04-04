@@ -91,13 +91,14 @@ export function Modal({ item, onClose }: ModalProps) {
   }, []);
 
   const handleReadOriginal = () => {
-    if (item.original_url) {
+    const targetUrl = item.original_url || item.url;
+    if (targetUrl) {
       trackEvent(item.processed_item_id, item.snapshot_date, 'click_original');
-      window.open(item.original_url, '_blank', 'noopener,noreferrer');
+      window.open(targetUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
-  const title = item.processed_title || '无标题';
+  const title = item.processed_title || item.title || '无标题';
   const summary = item.summary || '';
   
   // Parse extra and raw_metrics
@@ -245,7 +246,7 @@ export function Modal({ item, onClose }: ModalProps) {
 
         <div className="modal-footer">
           <button className="close-footer-btn" onClick={onClose}>×</button>
-          {item.original_url && (
+          {(item.original_url || item.url) && (
             <button 
               className="btn-primary"
               onClick={handleReadOriginal}

@@ -127,6 +127,7 @@ export default function Archive() {
               <div className="mc-label">{MONTH_NAMES[monthNum - 1]}</div>
               <div className="mc-score">{monthData.avg_aha_score.toFixed(1)}</div>
               <div className="mc-score-sub">平均 Aha 指数</div>
+              <div className="mc-top">{monthData.top_story_title}</div>
               <div className="mc-count">{monthData.item_count} 篇</div>
               <div className="mc-bar">
                 <div className="f"></div>
@@ -210,17 +211,17 @@ export default function Archive() {
                     </div>
                     
                     <div className={`day-items ${isOpen ? 'open' : ''}`}>
-                      {items.map((item, idx) => (
+                      {items.slice(0, 3).map((item, idx) => (
                         <div key={item.id} className="item-row">
                           <div className="ir-num">{String(idx + 1).padStart(2, '0')}</div>
-                          <div className="ir-title">{item.title}</div>
+                          <div className="ir-title">{item.processed_title || item.title}</div>
                           <div className="ir-tags">
                             {item.tags?.slice(0, 2).map(tag => (
                               <span key={tag} className="ir-tag">{tag}</span>
                             ))}
                           </div>
                           <div className="ir-src">{item.source_name}</div>
-                          <a href={item.url} target="_blank" rel="noopener noreferrer" className="ir-link">阅读全文 →</a>
+                          <a href={item.original_url || item.url} target="_blank" rel="noopener noreferrer" className="ir-link">阅读全文 →</a>
                         </div>
                       ))}
                       <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${day.snapshot_date}`} className="ir-more">查看当日全部 {day.item_count} 篇简报 →</Link>

@@ -13,9 +13,11 @@ export interface ProcessedItem {
   snapshot_date: string;
   source_name: string;
   content_type: string;
-  original_url: string;
+  title?: string;
+  url?: string;
+  original_url?: string;
   author: string | null;
-  processed_title: string | null;
+  processed_title?: string | null;
   summary: string | null;
   category: string | null;
   tags: string[] | null;

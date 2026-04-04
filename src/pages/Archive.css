@@ -170,6 +170,15 @@
   color: var(--inkf);
   margin-top: 3px;
 }
+.archive-page .mc-top {
+  font-family: var(--fs);
+  font-size: 11px;
+  color: var(--ink2);
+  margin-top: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .archive-page .mc-count {
   font-size: 10px;
   color: var(--ink3);

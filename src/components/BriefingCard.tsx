@@ -36,7 +36,7 @@ export function BriefingCard({ item, index, onClick, showDate }: BriefingCardPro
     }
   }
 
-  const title = item.processed_title || '无标题';
+  const title = item.processed_title || item.title || '无标题';
   const description = item.summary || '无摘要';
   const category = item.tags && item.tags.length > 0 ? item.tags[0] : '综合';
   const tags = item.tags ? item.tags.slice(1) : [];

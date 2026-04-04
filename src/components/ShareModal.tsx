@@ -628,7 +628,7 @@ export function ShareModal({ items: rawItems, onClose }: { items: ProcessedItem[
     
     return {
       rank: i + 1,
-      title: item.processed_title || "无标题",
+      title: item.processed_title || item.title || "无标题",
       source: item.source_name || "未知来源",
       tag: item.category || (item.tags && item.tags[0]) || "资讯",
       github,
