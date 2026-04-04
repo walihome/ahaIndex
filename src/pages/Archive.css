@@ -392,6 +392,7 @@
 .archive-page .item-row:last-child {
   border-bottom: none;
 }
+
 .archive-page .ir-num {
   font-size: 9px;
   letter-spacing: 1px;
@@ -842,4 +843,60 @@
   .archive-page .section-divider {
     margin: 16px 0;
   }
+}
+
+
+.back-to-overview {
+  text-align: center;
+  padding: 2rem 0 1rem;
+  border-top: 1px solid var(--border, #e0d8ce);
+  margin-top: 2rem;
+}
+
+.back-to-overview .lnk {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--accent, #8b2500);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+}
+
+
+.item-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-light, #f0ebe4);
+  flex-wrap: nowrap;
+}
+
+.ir-num {
+  flex-shrink: 0;
+  width: 1.5rem;
+}
+
+.ir-title {
+  flex: 1;
+  min-width: 0;            /* 关键：允许文字截断 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ir-tags {
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.ir-src {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.ir-link {
+  flex-shrink: 0;           /* 关键：不被压缩 */
+  white-space: nowrap;
+  margin-left: auto;        /* 推到最右边 */
 }

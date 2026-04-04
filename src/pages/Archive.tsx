@@ -110,9 +110,13 @@ export default function Archive() {
             );
           }
 
+          const isActive = selectedMonth 
+                    ? monthNum === selectedMonth      // 有选中月份时，高亮选中的
+                    : isCurrent;                       // 概览页时，高亮当前月
+
           if (!monthData) {
             return (
-              <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${selectedYear}-${String(monthNum).padStart(2, '0')}`} key={monthNum} className={`month-cell ${isCurrent ? 'current' : ''}`}>
+              <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${selectedYear}-${String(monthNum).padStart(2, '0')}`} key={monthNum} className={`month-cell ${isActive ? 'current' : ''}`}>
                 <div className="mc-label">{MONTH_NAMES[monthNum - 1]}</div>
                 <div className="mc-score">--</div>
                 <div className="mc-score-sub">平均 Aha 指数</div>
@@ -123,10 +127,10 @@ export default function Archive() {
           }
 
           return (
-            <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${selectedYear}-${String(monthNum).padStart(2, '0')}`} key={monthNum} className={`month-cell ${isCurrent ? 'current' : ''}`}>
+            <Link onClick={() => window.scrollTo(0, 0)} to={`/daily/${selectedYear}-${String(monthNum).padStart(2, '0')}`} key={monthNum} className={`month-cell ${isActive ? 'current' : ''}`}>
               <div className="mc-label">{MONTH_NAMES[monthNum - 1]}</div>
               <div className="mc-score">{monthData.avg_aha_score.toFixed(1)}</div>
-              <div className="mc-score-sub">平均 Aha 指数</div>
+              <div className="mc-score-sub">平均指数</div>
               <div className="mc-top">{monthData.top_story_title}</div>
               <div className="mc-count">{monthData.item_count} 篇</div>
               <div className="mc-bar">
@@ -150,9 +154,7 @@ export default function Archive() {
         <div className="month-detail-header">
           <h2>{selectedYear}年{MONTH_NAMES[selectedMonth - 1]}</h2>
           <span className="cnt">共收录 {monthData?.item_count || 0} 篇</span>
-          <Link to="/daily" className="lnk" onClick={() => {
-            window.scrollTo(0, 0);
-          }}>返回概览 ↑</Link>
+          
         </div>
         
         {monthData?.summary && (
@@ -229,6 +231,12 @@ export default function Archive() {
                   </div>
                 );
               })}
+
+              <div className="back-to-overview">
+                <Link to="/daily" className="lnk" onClick={() => window.scrollTo(0, 0)}>
+                  返回概览 ↑
+                </Link>
+              </div>
             </div>
           );
         })}
