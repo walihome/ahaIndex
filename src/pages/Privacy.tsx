@@ -10,10 +10,9 @@ export function Privacy() {
       <Helmet>
         <title>隐私政策 · AmazingIndex</title>
         <meta name="description" content="AmazingIndex 隐私政策：了解我们如何收集、使用和保护您的数据，以及 Google AdSense Cookie 的使用说明。" />
-        <link rel="canonical" href="https://amazingindex.com/privacy" />
-        <meta name="robots" content="noindex, follow" />
+        <link rel="canonical" href="https://www.amazingindex.com/privacy" />
         <meta property="og:title" content="隐私政策 · AmazingIndex" />
-        <meta property="og:url" content="https://amazingindex.com/privacy" />
+        <meta property="og:url" content="https://www.amazingindex.com/privacy" />
       </Helmet>
       <Masthead />
       <div className="page-hero">

@@ -76,10 +76,10 @@ export default function History() {
       <Helmet>
         <title>历史精选 · AmazingIndex</title>
         <meta name="description" content="AmazingIndex 历史精选：回顾过往最具价值的 AI 行业动态与创新洞察。" />
-        <link rel="canonical" href="https://amazingindex.com/history" />
+        <link rel="canonical" href="https://www.amazingindex.com/history" />
         <meta property="og:title" content="历史精选 · AmazingIndex" />
         <meta property="og:description" content="AmazingIndex 历史精选：回顾过往最具价值的 AI 行业动态与创新洞察。" />
-        <meta property="og:url" content="https://amazingindex.com/history" />
+        <meta property="og:url" content="https://www.amazingindex.com/history" />
       </Helmet>
       <Masthead items={items} />
       <NavBar 

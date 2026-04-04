@@ -10,10 +10,9 @@ export function Terms() {
       <Helmet>
         <title>服务条款 · AmazingIndex</title>
         <meta name="description" content="AmazingIndex 服务条款：使用本网站前请阅读内容版权、免责声明及用户行为规范。" />
-        <link rel="canonical" href="https://amazingindex.com/terms" />
-        <meta name="robots" content="noindex, follow" />
+        <link rel="canonical" href="https://www.amazingindex.com/terms" />
         <meta property="og:title" content="服务条款 · AmazingIndex" />
-        <meta property="og:url" content="https://amazingindex.com/terms" />
+        <meta property="og:url" content="https://www.amazingindex.com/terms" />
       </Helmet>
       <Masthead />
       <div className="page-hero">

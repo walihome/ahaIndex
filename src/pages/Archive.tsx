@@ -249,17 +249,17 @@ export default function Archive() {
       <Helmet>
         <title>{selectedMonth ? `历史归档 - ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} | AmazingIndex` : `历史归档 | AmazingIndex`}</title>
         <meta name="description" content={selectedMonth ? `在 AmazingIndex 探索 ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} 的 AI 行业动态与突破。` : `深入探索 AmazingIndex 过去 AI 行业动态的综合数据库，经过评分和分类，方便您发现。`} />
-        <link rel="canonical" href={selectedMonth ? `https://amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://amazingindex.com/daily`} />
+        <link rel="canonical" href={selectedMonth ? `https://www.amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://www.amazingindex.com/daily`} />
         <meta property="og:title" content={selectedMonth ? `历史归档 - ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} | AmazingIndex` : `历史归档 | AmazingIndex`} />
         <meta property="og:description" content={selectedMonth ? `在 AmazingIndex 探索 ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} 的 AI 行业动态与突破。` : `深入探索 AmazingIndex 过去 AI 行业动态的综合数据库，经过评分和分类，方便您发现。`} />
-        <meta property="og:url" content={selectedMonth ? `https://amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://amazingindex.com/daily`} />
+        <meta property="og:url" content={selectedMonth ? `https://www.amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://www.amazingindex.com/daily`} />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
             "name": selectedMonth ? `历史归档 - ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} | AmazingIndex` : `历史归档 | AmazingIndex`,
             "description": selectedMonth ? `在 AmazingIndex 探索 ${selectedYear}年${MONTH_NAMES[selectedMonth - 1]} 的 AI 行业动态与突破。` : `深入探索 AmazingIndex 过去 AI 行业动态的综合数据库，经过评分和分类，方便您发现。`,
-            "url": selectedMonth ? `https://amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://amazingindex.com/daily`
+            "url": selectedMonth ? `https://www.amazingindex.com/daily/${selectedYear}-${String(selectedMonth).padStart(2, '0')}` : `https://www.amazingindex.com/daily`
           })}
         </script>
       </Helmet>

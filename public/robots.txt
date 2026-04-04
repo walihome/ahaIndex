@@ -1,3 +1,4 @@
-# 暂时屏蔽
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://www.amazingindex.com/sitemap.xml

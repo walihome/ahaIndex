@@ -10,9 +10,9 @@ export function Contact() {
       <Helmet>
         <title>联系方式 · AmazingIndex</title>
         <meta name="description" content="与 AmazingIndex 团队联系，发送内容建议、合作咨询或任何反馈至 hi@amazingindex.com。" />
-        <link rel="canonical" href="https://amazingindex.com/contact" />
+        <link rel="canonical" href="https://www.amazingindex.com/contact" />
         <meta property="og:title" content="联系方式 · AmazingIndex" />
-        <meta property="og:url" content="https://amazingindex.com/contact" />
+        <meta property="og:url" content="https://www.amazingindex.com/contact" />
       </Helmet>
       <Masthead />
       <div className="page-hero">
