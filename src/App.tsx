@@ -54,10 +54,7 @@ export default function App() {
             if (!resp.ok) throw new Error("Failed to fetch latest");
             const json = await resp.json();
             setItems(json.items || []);
-            // 拿到日期后跳转到对应 URL
-            if (json.snapshot_date) {
-              navigate(`/daily/${json.snapshot_date}`, { replace: true });
-            }
+          
           } catch (err) {
             console.warn("Failed to fetch latest.json");
             setItems([]);
