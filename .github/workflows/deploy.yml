@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - 'src/**'
-      - 'scripts/**'
       - 'index.html'
       - 'package.json'
       - 'vite.config.ts'
@@ -29,13 +28,12 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Install ossutil v2
+      - name: Install ossutil
         run: |
           curl -Lo ossutil.zip https://gosspublic.alicdn.com/ossutil/v2/2.2.1/ossutil-2.2.1-linux-amd64.zip
           unzip ossutil.zip
           chmod +x ossutil-2.2.1-linux-amd64/ossutil
           sudo mv ossutil-2.2.1-linux-amd64/ossutil /usr/local/bin/ossutil
-          ossutil version
 
       - name: Deploy to OSS
         env:
@@ -46,35 +44,20 @@ jobs:
         run: |
           CREDS="--endpoint $OSS_ENDPOINT --access-key-id $OSS_ACCESS_KEY_ID --access-key-secret $OSS_ACCESS_KEY_SECRET --region $OSS_REGION"
 
-          # 同步所有前端产物（只上传，不删除）
-          ossutil sync ./dist/ oss://amazingindex/ \
+          # assets/ 长期缓存（Vite 带 hash，内容变了 hash 就变）
+          ossutil sync ./dist/assets/ oss://amazingindex/assets/ \
             --force \
+            --metadata "Cache-Control=max-age=31536000,immutable" \
             $CREDS
 
-          # HTML 文件覆盖设置 no-cache
-          find ./dist -name "*.html" | while read f; do
-            key="${f#./dist/}"
-            ossutil cp "$f" "oss://amazingindex/$key" \
-              --force \
-              --metadata "Cache-Control=no-cache" \
-              --content-type "text/html; charset=utf-8" \
-              $CREDS
-          done
+          # index.html 不缓存（入口文件，必须每次拿最新）
+          ossutil cp ./dist/index.html oss://amazingindex/index.html \
+            --force \
+            --metadata "Cache-Control=no-cache" \
+            --content-type "text/html; charset=utf-8" \
+            $CREDS
 
-          # JS/CSS 覆盖设置长期缓存
-          if [ -d "./dist/assets" ]; then
-            ossutil sync ./dist/assets/ oss://amazingindex/assets/ \
-              --force \
-              --metadata "Cache-Control=max-age=31536000" \
-              $CREDS
-          fi
-
-      - name: Deployment summary
-        run: |
-          echo "✅ Deployed to OSS"
-          echo "HTML pages: $(find ./dist -name '*.html' | wc -l)"
-          echo "Asset files: $(find ./dist/assets -type f 2>/dev/null | wc -l)"
-      - name: Refresh CDN (homepage)
+      - name: Refresh CDN
         env:
           ALIBABA_CLOUD_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
           ALIBABA_CLOUD_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
@@ -93,15 +76,16 @@ jobs:
           )
           client = Client(config)
 
-          urls = [
-              'https://www.amazingindex.com/',
-              'https://www.amazingindex.com/index.html',
-          ]
-
+          # index.html 是唯一需要刷新的，assets 靠 hash 自动失效
           request = cdn_models.RefreshObjectCachesRequest(
-              object_path='\n'.join(urls),
+              object_path='https://www.amazingindex.com/index.html',
               object_type='File'
           )
           client.refresh_object_caches(request)
-          print(f"✅ CDN refreshed: {len(urls)} URLs")
+          print("✅ CDN refreshed: index.html")
           EOF
+
+      - name: Summary
+        run: |
+          echo "✅ Deployed to OSS"
+          echo "Assets: $(find ./dist/assets -type f | wc -l) files"
