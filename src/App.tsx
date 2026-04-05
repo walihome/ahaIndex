@@ -12,25 +12,14 @@ import { ProcessedItem } from './types';
 
 const OSS_BASE = '';
 
-declare global {
-  interface Window {
-    __PRELOADED_DATA__?: {
-      snapshot_date: string;
-      items: ProcessedItem[];
-    };
-  }
-}
-
-const PRELOADED = window.__PRELOADED_DATA__;
-
 export default function App() {
   const { dateOrMonth: date } = useParams<{ dateOrMonth: string }>();
   const location = useLocation();
   const itemIdMatch = location.pathname.match(/\/article\/([^/]+)$/);
   const itemId = itemIdMatch ? itemIdMatch[1] : undefined;
   const navigate = useNavigate();
-  const [items, setItems] = useState<ProcessedItem[]>(PRELOADED?.items || []);
-  const [loading, setLoading] = useState(!PRELOADED);
+  const [items, setItems] = useState<ProcessedItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<ProcessedItem | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('全部');
 
@@ -40,40 +29,29 @@ export default function App() {
         let targetDate = date;
 
         if (!targetDate) {
-          if (PRELOADED) {
-            setItems(PRELOADED.items);
-            setLoading(false);
-            return;
-          }
+          // 首页：直接从 OSS 拉最新数据
           try {
-            const resp = await fetch(`${OSS_BASE}/api/latest.json`);
-            if (!resp.ok) throw new Error('Network response was not ok');
+            const resp = await fetch('/api/latest.json');
+            if (!resp.ok) throw new Error('Failed to fetch latest');
             const json = await resp.json();
-            targetDate = json.snapshot_date;
+            setItems(json.items || []);
+            // 拿到日期后跳转到对应 URL
+            if (json.snapshot_date) {
+              navigate(`/daily/${json.snapshot_date}`, { replace: true });
+            }
           } catch (err) {
-            console.warn('Failed to fetch latest.json.');
+            console.warn('Failed to fetch latest.json');
             setItems([]);
-            setLoading(false);
-            return;
           }
-        } else {
-          if (PRELOADED && targetDate === PRELOADED.snapshot_date) {
-            setItems(PRELOADED.items);
-            setLoading(false);
-            return;
-          }
-        }
-
-        if (!targetDate) {
-          setItems([]);
           setLoading(false);
           return;
         }
 
+        // 历史日期：逻辑不变
         setLoading(true);
         try {
           const resp = await fetch(
-            `${OSS_BASE}/api/daily/${targetDate.slice(0,4)}/${targetDate.slice(5,7)}/${targetDate}.json`
+            `/api/daily/${targetDate.slice(0,4)}/${targetDate.slice(5,7)}/${targetDate}.json`
           );
           if (resp.ok) {
             const json = await resp.json();
@@ -82,7 +60,7 @@ export default function App() {
             setItems([]);
           }
         } catch (err) {
-          console.warn(`Failed to fetch daily data for ${targetDate}.`);
+          console.warn(`Failed to fetch daily data for ${targetDate}`);
           setItems([]);
         }
       } catch (err) {
