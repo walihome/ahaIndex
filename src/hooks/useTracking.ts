@@ -1,4 +1,10 @@
 import { useEffect, useRef, useCallback } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL!,
+  import.meta.env.VITE_SUPABASE_ANON_KEY!
+);
 
 // Cookie 工具函数
 const setCookie = (name: string, value: string, days: number) => {
@@ -45,7 +51,12 @@ export function useTracking() {
     
     console.log(`Tracking: Sending ${event_type}...`, { item_id, user_id });
 
-    // Supabase removed
+    supabase.from('user_events').insert({
+      item_id,
+      snapshot_date,
+      event_type,
+      user_id
+    }).then(); // fire-and-forget
   }, []);
 
   return { trackEvent };
@@ -74,7 +85,12 @@ export function useImpression(item_id: string, snapshot_date: string) {
           if (user_id && !trackedImpressions.has(trackingKey)) {
             trackedImpressions.add(trackingKey);
             
-            // Supabase removed
+            supabase.from('user_events').insert({
+              item_id,
+              snapshot_date,
+              event_type: 'impression',
+              user_id
+            }).then(); // fire-and-forget
             console.log(`Tracking: Impression recorded for ${item_id}`);
           }
           observer.disconnect();
